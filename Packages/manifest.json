@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "com.nn555k.gamefoundation.core": "file:com.nn555k.gamefoundation.core",
+    "com.nn555k.gamefoundation.hotupdate": "file:com.nn555k.gamefoundation.hotupdate",
+    "com.nn555k.gamefoundation.hotupdate.yooasset": "file:com.nn555k.gamefoundation.hotupdate.yooasset",
+    "com.nn555k.gamefoundation.save": "file:com.nn555k.gamefoundation.save",
+    "com.nn555k.gamefoundation.sdk": "file:com.nn555k.gamefoundation.sdk",
+    "com.nn555k.gamefoundation.setup": "file:com.nn555k.gamefoundation.setup",
+    "com.nn555k.gamefoundation.ui": "file:com.nn555k.gamefoundation.ui",
+    "com.tuyoogame.yooasset": "https://github.com/tuyoogame/YooAsset.git?path=Assets/YooAsset#2.3.18",
+    "com.unity.test-framework": "1.1.33",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.jsonserialize": "1.0.0",
+    "com.unity.modules.ui": "1.0.0"
+  },
+  "testables": [
+    "com.nn555k.gamefoundation.hotupdate",
+    "com.nn555k.gamefoundation.hotupdate.yooasset",
+    "com.nn555k.gamefoundation.save",
+    "com.nn555k.gamefoundation.sdk",
+    "com.nn555k.gamefoundation.setup",
+    "com.nn555k.gamefoundation.ui"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "com.nn555k.gamefoundation.save",
+  "version": "0.6.0",
+  "displayName": "Game Foundation Save",
+  "description": "Versioned save envelopes, migrations, and recoverable Unity save stores.",
+  "unity": "2022.3",
+  "license": "UNLICENSED",
+  "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.save",
+  "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.save/CHANGELOG.md",
+  "dependencies": {
+    "com.nn555k.gamefoundation.core": "0.6.0"
+  },
+  "keywords": [
+    "save",
+    "persistence",
+    "migration"
+  ],
+  "author": {
+    "name": "nn555k",
+    "url": "https://github.com/nn555k"
+  },
+  "samples": [
+    {
+      "displayName": "Versioned Save",
+      "description": "A small serializable data model, migration and service composition example.",
+      "path": "Samples~/VersionedSave"
+    }
+  ]
+}

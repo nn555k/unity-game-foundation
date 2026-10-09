@@ -1,0 +1,26 @@
+{
+  "name": "com.nn555k.gamefoundation.core",
+  "version": "0.6.0",
+  "displayName": "Game Foundation Core",
+  "description": "Shared QFramework composition, clock, logging, and infrastructure contracts for Unity projects.",
+  "unity": "2022.3",
+  "license": "UNLICENSED",
+  "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.core",
+  "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.core/CHANGELOG.md",
+  "keywords": [
+    "architecture",
+    "qframework",
+    "foundation"
+  ],
+  "samples": [
+    {
+      "displayName": "Project Architecture",
+      "description": "Minimal project-owned QFramework architecture that composes the Foundation Core module.",
+      "path": "Samples~/ProjectArchitecture"
+    }
+  ],
+  "author": {
+    "name": "nn555k",
+    "url": "https://github.com/nn555k"
+  }
+}

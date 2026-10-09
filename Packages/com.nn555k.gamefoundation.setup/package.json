@@ -1,0 +1,28 @@
+{
+  "name": "com.nn555k.gamefoundation.setup",
+  "version": "0.6.0",
+  "displayName": "Game Foundation Project Setup",
+  "description": "Editor-only project bootstrap for QFramework architecture, AI governance, Feature Specs, convention validation, and CI.",
+  "unity": "2022.3",
+  "license": "UNLICENSED",
+  "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.setup",
+  "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.setup/CHANGELOG.md",
+  "dependencies": {
+    "com.nn555k.gamefoundation.core": "0.6.0",
+    "com.nn555k.gamefoundation.hotupdate": "0.6.0",
+    "com.nn555k.gamefoundation.save": "0.6.0",
+    "com.nn555k.gamefoundation.sdk": "0.6.0",
+    "com.nn555k.gamefoundation.ui": "0.6.0"
+  },
+  "keywords": [
+    "setup",
+    "scaffold",
+    "qframework",
+    "governance",
+    "feature-spec"
+  ],
+  "author": {
+    "name": "nn555k",
+    "url": "https://github.com/nn555k"
+  }
+}

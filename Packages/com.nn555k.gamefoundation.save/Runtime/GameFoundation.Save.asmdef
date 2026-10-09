@@ -1,0 +1,9 @@
+{
+  "name": "GameFoundation.Save",
+  "rootNamespace": "GameFoundation.Save",
+  "references": [
+    "QFramework",
+    "GameFoundation.Core"
+  ],
+  "autoReferenced": true
+}

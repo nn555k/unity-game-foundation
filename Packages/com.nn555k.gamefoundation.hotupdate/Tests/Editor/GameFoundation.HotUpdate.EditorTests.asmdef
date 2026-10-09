@@ -1,0 +1,16 @@
+{
+  "name": "GameFoundation.HotUpdate.EditorTests",
+  "rootNamespace": "GameFoundation.HotUpdate.Tests",
+  "references": [
+    "GameFoundation.Core",
+    "GameFoundation.HotUpdate",
+    "QFramework"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

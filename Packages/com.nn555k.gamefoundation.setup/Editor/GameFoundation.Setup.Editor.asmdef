@@ -1,0 +1,16 @@
+{
+  "name": "GameFoundation.Setup.Editor",
+  "rootNamespace": "GameFoundation.Setup.Editor",
+  "references": [
+    "GameFoundation.Core",
+    "GameFoundation.HotUpdate",
+    "GameFoundation.Save",
+    "GameFoundation.Sdk",
+    "GameFoundation.UI",
+    "QFramework"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

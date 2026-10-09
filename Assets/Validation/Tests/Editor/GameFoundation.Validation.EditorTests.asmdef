@@ -1,0 +1,21 @@
+{
+  "name": "GameFoundation.Validation.EditorTests",
+  "rootNamespace": "GameFoundation.Validation.Tests",
+  "references": [
+    "GameFoundation.Core",
+    "GameFoundation.HotUpdate",
+    "GameFoundation.Save",
+    "GameFoundation.Sdk",
+    "GameFoundation.Setup.Editor",
+    "GameFoundation.UI",
+    "GameFoundation.Validation",
+    "QFramework"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

@@ -1,0 +1,29 @@
+{
+  "name": "com.nn555k.gamefoundation.sdk",
+  "version": "0.6.0",
+  "displayName": "Game Foundation SDK",
+  "description": "Optional SDK adapter lifecycle, consent gating, ordered initialization, timeout, and diagnostics.",
+  "unity": "2022.3",
+  "license": "UNLICENSED",
+  "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.sdk",
+  "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.sdk/CHANGELOG.md",
+  "dependencies": {
+    "com.nn555k.gamefoundation.core": "0.6.0"
+  },
+  "keywords": [
+    "sdk",
+    "lifecycle",
+    "consent"
+  ],
+  "author": {
+    "name": "nn555k",
+    "url": "https://github.com/nn555k"
+  },
+  "samples": [
+    {
+      "displayName": "SDK Adapter Template",
+      "description": "A vendor-neutral adapter seam for project-owned SDK integrations.",
+      "path": "Samples~/AdapterTemplate"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "GameFoundation.Sdk",
+  "rootNamespace": "GameFoundation.Sdk",
+  "references": [
+    "QFramework",
+    "GameFoundation.Core"
+  ],
+  "autoReferenced": true
+}

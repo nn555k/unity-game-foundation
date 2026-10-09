@@ -1,0 +1,11 @@
+{
+  "name": "GameFoundation.HotUpdate.YooAsset",
+  "rootNamespace": "GameFoundation.HotUpdate.YooAsset",
+  "references": [
+    "GameFoundation.HotUpdate",
+    "QFramework",
+    "YooAsset"
+  ],
+  "autoReferenced": true,
+  "noEngineReferences": false
+}

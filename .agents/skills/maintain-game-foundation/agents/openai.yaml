@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Game Foundation"
+  short_description: "Safely evolve shared Unity Foundation packages"
+  default_prompt: "Use $maintain-game-foundation to update the shared Unity Foundation packages safely."

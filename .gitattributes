@@ -1,0 +1,5 @@
+# Unity serializers and the vendored QFramework source preserve upstream trailing spaces.
+*.meta -whitespace
+*.asset -whitespace
+*.unity -whitespace
+Assets/ThirdParty/QFramework/QFramework.cs -whitespace

@@ -1,0 +1,8 @@
+{
+  "name": "GameFoundation.Sdk.AdapterTemplate",
+  "rootNamespace": "GameFoundation.Samples.Sdk",
+  "references": [
+    "GameFoundation.Sdk"
+  ],
+  "autoReferenced": true
+}

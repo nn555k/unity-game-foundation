@@ -1,0 +1,16 @@
+{
+  "name": "GameFoundation.Sdk.EditorTests",
+  "rootNamespace": "GameFoundation.Sdk.Tests",
+  "references": [
+    "GameFoundation.Core",
+    "GameFoundation.Sdk",
+    "QFramework"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

@@ -1,0 +1,12 @@
+{
+  "name": "GameFoundation.UI.Editor",
+  "rootNamespace": "GameFoundation.UI.Editor",
+  "references": [
+    "GameFoundation.UI",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

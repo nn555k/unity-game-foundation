@@ -1,0 +1,23 @@
+{
+  "name": "com.nn555k.gamefoundation.hotupdate.yooasset",
+  "version": "0.6.0",
+  "displayName": "Game Foundation YooAsset Backend",
+  "description": "Production YooAsset 2.3 backend for the Game Foundation check, pre-download, verify, commit, cancellation, and offline fallback lifecycle.",
+  "unity": "2022.3",
+  "license": "UNLICENSED",
+  "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.hotupdate.yooasset",
+  "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.hotupdate.yooasset/CHANGELOG.md",
+  "dependencies": {
+    "com.nn555k.gamefoundation.hotupdate": "0.6.0",
+    "com.tuyoogame.yooasset": "2.3.18"
+  },
+  "keywords": [
+    "hot-update",
+    "yooasset",
+    "content"
+  ],
+  "author": {
+    "name": "nn555k",
+    "url": "https://github.com/nn555k"
+  }
+}

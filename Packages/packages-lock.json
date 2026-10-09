@@ -1,0 +1,149 @@
+{
+  "dependencies": {
+    "com.nn555k.gamefoundation.core": {
+      "version": "file:com.nn555k.gamefoundation.core",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.nn555k.gamefoundation.hotupdate": {
+      "version": "file:com.nn555k.gamefoundation.hotupdate",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.nn555k.gamefoundation.core": "0.6.0"
+      }
+    },
+    "com.nn555k.gamefoundation.hotupdate.yooasset": {
+      "version": "file:com.nn555k.gamefoundation.hotupdate.yooasset",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.nn555k.gamefoundation.hotupdate": "0.6.0",
+        "com.tuyoogame.yooasset": "2.3.18"
+      }
+    },
+    "com.nn555k.gamefoundation.save": {
+      "version": "file:com.nn555k.gamefoundation.save",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.nn555k.gamefoundation.core": "0.6.0"
+      }
+    },
+    "com.nn555k.gamefoundation.sdk": {
+      "version": "file:com.nn555k.gamefoundation.sdk",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.nn555k.gamefoundation.core": "0.6.0"
+      }
+    },
+    "com.nn555k.gamefoundation.setup": {
+      "version": "file:com.nn555k.gamefoundation.setup",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.nn555k.gamefoundation.core": "0.6.0",
+        "com.nn555k.gamefoundation.hotupdate": "0.6.0",
+        "com.nn555k.gamefoundation.save": "0.6.0",
+        "com.nn555k.gamefoundation.sdk": "0.6.0",
+        "com.nn555k.gamefoundation.ui": "0.6.0"
+      }
+    },
+    "com.nn555k.gamefoundation.ui": {
+      "version": "file:com.nn555k.gamefoundation.ui",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.nn555k.gamefoundation.core": "0.6.0",
+        "com.unity.ugui": "1.0.0"
+      }
+    },
+    "com.tuyoogame.yooasset": {
+      "version": "https://github.com/tuyoogame/YooAsset.git?path=Assets/YooAsset#2.3.18",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.scriptablebuildpipeline": "1.21.25",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+      },
+      "hash": "4b6a8ca4064d7a59ba129acec8fecf134e86236e"
+    },
+    "com.unity.ext.nunit": {
+      "version": "1.0.6",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "1.21.25",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.test-framework": {
+      "version": "1.1.33",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.6",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.ugui": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0"
+      }
+    },
+    "com.unity.modules.assetbundle": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.modules.imgui": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.modules.jsonserialize": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.modules.ui": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.modules.unitywebrequest": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.modules.unitywebrequestassetbundle": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0"
+      }
+    }
+  }
+}

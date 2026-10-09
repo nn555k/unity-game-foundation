@@ -1,0 +1,6 @@
+{
+  "name": "GameFoundation.HotUpdate.YooAsset.Editor",
+  "references": ["YooAsset", "YooAsset.Editor"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

@@ -1,0 +1,9 @@
+{
+  "name": "GameFoundation.HotUpdate",
+  "rootNamespace": "GameFoundation.HotUpdate",
+  "references": [
+    "QFramework",
+    "GameFoundation.Core"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,8 @@
+{
+  "name": "GameFoundation.Core",
+  "rootNamespace": "GameFoundation.Core",
+  "references": [
+    "QFramework"
+  ],
+  "autoReferenced": true
+}

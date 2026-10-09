@@ -1,0 +1,29 @@
+{
+  "name": "com.nn555k.gamefoundation.hotupdate",
+  "version": "0.6.0",
+  "displayName": "Game Foundation Hot Update",
+  "description": "Backend-neutral content update orchestration with progress, verification, commit, cancellation, and rollback.",
+  "unity": "2022.3",
+  "license": "UNLICENSED",
+  "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.hotupdate",
+  "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.hotupdate/CHANGELOG.md",
+  "dependencies": {
+    "com.nn555k.gamefoundation.core": "0.6.0"
+  },
+  "keywords": [
+    "hot-update",
+    "content",
+    "rollback"
+  ],
+  "author": {
+    "name": "nn555k",
+    "url": "https://github.com/nn555k"
+  },
+  "samples": [
+    {
+      "displayName": "Content Backend Template",
+      "description": "A bridge template for YooAsset, Addressables or another project-owned content provider.",
+      "path": "Samples~/BackendTemplate"
+    }
+  ]
+}

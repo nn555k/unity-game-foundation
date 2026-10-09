@@ -1,0 +1,10 @@
+{
+  "name": "GameFoundation.Save.VersionedSaveSample",
+  "rootNamespace": "GameFoundation.Samples.Save",
+  "references": [
+    "GameFoundation.Core",
+    "GameFoundation.Save",
+    "QFramework"
+  ],
+  "autoReferenced": true
+}

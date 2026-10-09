@@ -1,0 +1,11 @@
+{
+  "name": "GameFoundation.Validation.PlayModeTests",
+  "rootNamespace": "GameFoundation.Validation.PlayModeTests",
+  "references": [
+    "GameFoundation.UI"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

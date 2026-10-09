@@ -1,0 +1,9 @@
+{
+  "name": "GameFoundation.HotUpdate.BackendTemplate",
+  "rootNamespace": "GameFoundation.Samples.HotUpdate",
+  "references": [
+    "GameFoundation.HotUpdate",
+    "QFramework"
+  ],
+  "autoReferenced": true
+}

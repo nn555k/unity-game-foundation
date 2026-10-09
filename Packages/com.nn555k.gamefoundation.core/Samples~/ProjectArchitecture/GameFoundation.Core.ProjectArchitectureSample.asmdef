@@ -1,0 +1,9 @@
+{
+  "name": "GameFoundation.Core.ProjectArchitectureSample",
+  "rootNamespace": "GameFoundation.Samples",
+  "references": [
+    "GameFoundation.Core",
+    "QFramework"
+  ],
+  "autoReferenced": true
+}

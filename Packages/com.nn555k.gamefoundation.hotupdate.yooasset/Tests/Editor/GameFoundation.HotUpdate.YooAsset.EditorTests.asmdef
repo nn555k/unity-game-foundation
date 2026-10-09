@@ -1,0 +1,17 @@
+{
+  "name": "GameFoundation.HotUpdate.YooAsset.EditorTests",
+  "rootNamespace": "GameFoundation.HotUpdate.YooAsset.Tests",
+  "references": [
+    "GameFoundation.HotUpdate.YooAsset",
+    "GameFoundation.HotUpdate.YooAsset.Editor",
+    "YooAsset.Editor",
+    "YooAsset"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

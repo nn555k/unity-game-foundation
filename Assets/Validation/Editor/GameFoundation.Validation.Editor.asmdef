@@ -1,0 +1,11 @@
+{
+  "name": "GameFoundation.Validation.Editor",
+  "rootNamespace": "GameFoundation.Validation.Editor",
+  "references": [
+    "GameFoundation.Validation"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

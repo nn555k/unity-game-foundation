@@ -1,0 +1,10 @@
+{
+  "name": "GameFoundation.UI",
+  "rootNamespace": "GameFoundation.UI",
+  "references": [
+    "QFramework",
+    "GameFoundation.Core",
+    "UnityEngine.UI"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,13 @@
+{
+  "name": "GameFoundation.Validation",
+  "rootNamespace": "GameFoundation.Validation",
+  "references": [
+    "GameFoundation.Core",
+    "GameFoundation.HotUpdate",
+    "GameFoundation.Save",
+    "GameFoundation.Sdk",
+    "GameFoundation.UI",
+    "QFramework"
+  ],
+  "autoReferenced": true
+}
