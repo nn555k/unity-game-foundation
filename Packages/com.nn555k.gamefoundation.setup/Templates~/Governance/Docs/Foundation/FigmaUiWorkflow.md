@@ -11,7 +11,7 @@ Figma 插件导入的内容作为原始设计层，生产 Prefab 作为运行层
 1. 如需下载或同步，确认开发者已接入外部设计工具，并已配置本机凭据；AI 不自动安装。已有导入资产无需重新下载。
 2. 确认 Figma 文件、页面、Frame、节点 ID 和导入目录。
 3. 通过项目选择的外部工具拉取到临时源层，按稳定 File/Frame/Node ID 同步明确允许的字段；具体能力以实际工具为准。
-4. 区分 Popup、Page、Hud、Overlay、ListItem 或 Component，并按 `ResourceLoading.md` 确定加载方式和生产路径：路径加载的预制体在 `Assets/Resources/Prefabs/UI`，直接引用的预制体在 `Assets/Sprites/Prefabs/UI`。原始导入层在 `Assets/Sprites/DesignImports`，直接引用的图片在 `Assets/Sprites/UI`。
+4. 区分 Popup、Page、Hud、Overlay、ListItem 或 Component，并按 `ResourceLoading.md` 确定加载方式和生产路径：路径加载的预制体在 `Assets/Resources/Prefabs/UI`，弹窗在 `Assets/Resources/Prefabs/UI/Popups`，直接引用的预制体在 `Assets/Prefabs/UI`。设计源文件在 `Assets/Art/DesignImports`，导入 Prefab 草稿在 `Assets/Prefabs/DesignImports`，提取的 Sprite 图片在 `Assets/Sprites/UI`；普通贴图和材质在 `Assets/Art`。
 5. 保存一份稳定的语义命名映射；不确定含义的节点保持原名并报告。
 6. 调用 `FigmaPrefabNormalizer.Preview` 查看将创建、移动和重命名的节点。
 7. 通过 Unity Editor API 调用 `FigmaPrefabNormalizer.Apply`，不得文本编辑 Prefab YAML。

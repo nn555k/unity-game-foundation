@@ -37,7 +37,7 @@ def parse_arguments() -> argparse.Namespace:
         default="https://github.com/nn555k/unity-game-foundation.git",
         help="Git repository URL",
     )
-    parser.add_argument("--ref", default="v0.6.0", help="Git branch, tag or commit")
+    parser.add_argument("--ref", default="v0.6.1", help="Git branch, tag or commit")
     parser.add_argument("--dry-run", action="store_true", help="Print without writing")
     return parser.parse_args()
 

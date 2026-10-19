@@ -9,7 +9,7 @@ Build project-owned features on the shared infrastructure without moving product
 
 ## Required context
 
-Read repository `AGENTS.md`, `.gamefoundation/project.json`, `Docs/Foundation/Architecture.md`, the related `Docs/Features/<feature-id>.md`, and the project architecture entry before editing. Read `references/capability-routing.md` for module ownership and `references/verification.md` before choosing tests. For folder and QFramework patterns, read `references/project-architecture.md`.
+Read repository `AGENTS.md`, `.gamefoundation/project.json`, `Docs/Foundation/Architecture.md`, the related `Docs/Features/<feature-id>.md`, and the project architecture entry before editing. Read `references/capability-routing.md` for module ownership and `references/verification.md` before choosing tests. For folder and QFramework patterns, read `Docs/Foundation/ProjectLayout.md` and `references/project-architecture.md`. Before deleting unused models, audit runtime references, string paths and Editor generation inputs; keep recovery outside Assets.
 
 ## Workflow
 
@@ -26,7 +26,7 @@ Read repository `AGENTS.md`, `.gamefoundation/project.json`, `Docs/Foundation/Ar
 
 ## Decision rule
 
-For UI/prefab/art work, read `Docs/Foundation/ResourceLoading.md`. Use Resources for path loading; put its targets under `Assets/Resources`. Direct-reference UI/prefabs/art belong under `Assets/Sprites`. Record paths, load keys/reference owners and lifecycle in the Feature Spec before creation. Preserve existing loaders and paths; do not auto-migrate them to YooAsset.
+For UI/prefab/art work, read `Docs/Foundation/ResourceLoading.md`. Use Resources for path loading; put its targets under `Assets/Resources`. Direct-reference prefabs belong under `Assets/Prefabs`, non-Sprite art under `Assets/Art`, and only Sprite images/assets under `Assets/Sprites`. New popups use `Assets/Resources/Prefabs/UI/Popups`, first-use loading, cached instances and explicit failure handling; do not preload all popups from the startup HUD. Record paths, load keys/reference owners and lifecycle in the Feature Spec before creation. Preserve existing loaders and paths; do not auto-migrate them to YooAsset.
 
 Change `Packages/com.nn555k.gamefoundation.*` only when the requirement is demonstrably generic across projects and the task explicitly includes evolving the shared framework. When that is true, switch to `$maintain-game-foundation` and validate compatibility separately.
 

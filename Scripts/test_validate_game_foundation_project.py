@@ -80,7 +80,7 @@ class ProjectValidatorTests(unittest.TestCase):
 
     def test_resources_and_direct_reference_art_can_coexist(self) -> None:
         """Accept separate dynamic and direct-reference files while ignoring editor-only collisions."""
-        for relative in ("Assets/Resources/UI/icon.txt", "Assets/Sprites/UI/icon.txt",
+        for relative in ("Assets/Resources/UI/icon.txt", "Assets/Art/Fonts/LICENSE.txt",
                          "Assets/Editor/Resources/UI/icon.txt", "Assets/Resources/UI/icon.txt.meta"):
             path = self.project / relative
             path.parent.mkdir(parents=True, exist_ok=True)

@@ -50,6 +50,7 @@ def source_mappings() -> list[tuple[Path, Path]]:
         "FigmaUiWorkflow.md",
         "IntegrationAdapters.md",
         "ResourceLoading.md",
+        "ProjectLayout.md",
     ):
         mappings.append(
             (

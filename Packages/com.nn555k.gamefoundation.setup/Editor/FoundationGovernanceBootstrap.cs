@@ -64,7 +64,7 @@ namespace GameFoundation.Setup.Editor
             var configuration = new FoundationProjectConfigurationData
             {
                 schemaVersion = 1,
-                generatedByVersion = "0.6.0",
+                generatedByVersion = "0.6.1",
                 projectName = options.ProjectName,
                 rootNamespace = options.RootNamespace,
                 codeRoot = codeRoot,

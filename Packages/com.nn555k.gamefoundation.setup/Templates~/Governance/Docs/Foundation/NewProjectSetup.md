@@ -2,7 +2,7 @@
 
 ## AI 默认接入入口
 
-从框架仓库运行一次下列命令。目标目录可以是空目录或已有 Unity 2022.3 工程；先关闭该工程的 Unity Editor：
+从框架仓库运行一次下列命令。目标目录可以是空目录或尚未建立自有架构的 Unity 2022.3 工程；先关闭该工程的 Unity Editor：
 
 ```bash
 python3 Scripts/onboard_project.py \
@@ -17,7 +17,9 @@ python3 Scripts/onboard_project.py \
 
 初始化后的项目再次运行只需 `--project`。名称、命名空间、代码目录从 `.gamefoundation/project.json` 读取。不同项目身份或重复 Architecture 会在 Setup 写入前被拒绝；已有项目代码、Prefab 和采集规则不被覆盖。旧版本误生成多个 App 时，需要先明确保留哪个架构并迁移，再继续接入。
 
-默认 YooAsset 结构：
+已有自有架构的工程先核对配置中的 architectureFile/controllerFile。当前生成器使用 `<ProjectName>App` / `<ProjectName>Controller`；若已有类型不符，应走项目专用接入流程并复用已有架构，不改名、不用新项目向导制造第二个入口。仅安装包不代表完成接入。
+
+默认资源结构：
 
 ```text
 Assets/Settings/GameFoundation/AssetBundleCollectorSetting.asset
@@ -28,10 +30,16 @@ Assets/Settings/GameFoundation/AssetBundleCollectorSetting.asset
 
 Assets/GameContent                     # 仅预留给明确选择的热更内容
 Assets/Resources/Prefabs/UI             # 默认动态加载的 UI / Prefab
+Assets/Resources/Prefabs/UI/Popups      # 弹窗首次打开加载，随后复用
 Assets/Resources/Sprites/UI             # 默认动态加载的 Sprite
-Assets/Sprites/UI                       # 直接引用的图片
-Assets/Sprites/Prefabs/UI               # 直接引用的 UI / Prefab
-Assets/Sprites/DesignImports            # Figma 原始导入层
+Assets/Sprites/UI                       # 仅 Sprite 图片/资产
+Assets/Prefabs/UI                       # 直接引用的 UI / Prefab
+Assets/Prefabs/DesignImports            # 导入 Prefab 草稿
+Assets/Art/Models                       # 模型与 Mesh
+Assets/Art/Materials                    # 材质与 Shader
+Assets/Art/Textures                     # 普通/法线贴图
+Assets/Art/Fonts                        # 字体及许可证
+Assets/Art/DesignImports                # 原始设计源文件
 ```
 
 首次可通过 `--content-package` 和 `--content-root` 调整热更目录。已有 Collector 配置时保留其资源包、分组和规则，只打开 Package 列表并校验。YooAsset 默认按资源路径寻址，但不接管默认 UI 加载；不会把整个 Assets 或 Resources 加入采集。

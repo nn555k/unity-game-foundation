@@ -1,6 +1,6 @@
 {
   "name": "com.nn555k.gamefoundation.hotupdate",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "displayName": "Game Foundation Hot Update",
   "description": "Backend-neutral content update orchestration with progress, verification, commit, cancellation, and rollback.",
   "unity": "2022.3",
@@ -8,7 +8,7 @@
   "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.hotupdate",
   "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.hotupdate/CHANGELOG.md",
   "dependencies": {
-    "com.nn555k.gamefoundation.core": "0.6.0"
+    "com.nn555k.gamefoundation.core": "0.6.1"
   },
   "keywords": [
     "hot-update",

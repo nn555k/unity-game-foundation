@@ -11,7 +11,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.nn555k.gamefoundation.core": "0.6.0"
+        "com.nn555k.gamefoundation.core": "0.6.1"
       }
     },
     "com.nn555k.gamefoundation.hotupdate.yooasset": {
@@ -19,7 +19,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.nn555k.gamefoundation.hotupdate": "0.6.0",
+        "com.nn555k.gamefoundation.hotupdate": "0.6.1",
         "com.tuyoogame.yooasset": "2.3.18"
       }
     },
@@ -28,7 +28,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.nn555k.gamefoundation.core": "0.6.0"
+        "com.nn555k.gamefoundation.core": "0.6.1"
       }
     },
     "com.nn555k.gamefoundation.sdk": {
@@ -36,7 +36,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.nn555k.gamefoundation.core": "0.6.0"
+        "com.nn555k.gamefoundation.core": "0.6.1"
       }
     },
     "com.nn555k.gamefoundation.setup": {
@@ -44,11 +44,11 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.nn555k.gamefoundation.core": "0.6.0",
-        "com.nn555k.gamefoundation.hotupdate": "0.6.0",
-        "com.nn555k.gamefoundation.save": "0.6.0",
-        "com.nn555k.gamefoundation.sdk": "0.6.0",
-        "com.nn555k.gamefoundation.ui": "0.6.0"
+        "com.nn555k.gamefoundation.core": "0.6.1",
+        "com.nn555k.gamefoundation.hotupdate": "0.6.1",
+        "com.nn555k.gamefoundation.save": "0.6.1",
+        "com.nn555k.gamefoundation.sdk": "0.6.1",
+        "com.nn555k.gamefoundation.ui": "0.6.1"
       }
     },
     "com.nn555k.gamefoundation.ui": {
@@ -56,7 +56,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.nn555k.gamefoundation.core": "0.6.0",
+        "com.nn555k.gamefoundation.core": "0.6.1",
         "com.unity.ugui": "1.0.0"
       }
     },

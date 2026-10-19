@@ -26,7 +26,7 @@ Read repository `AGENTS.md`, `Docs/Foundation/FigmaUiWorkflow.md`, the related `
 
 ## Default popup invariant
 
-Before choosing a production path, read `Docs/Foundation/ResourceLoading.md`. Raw imports go under `Assets/Sprites/DesignImports`; path-loaded UI prefabs under `Assets/Resources/Prefabs/UI`; directly referenced prefabs under `Assets/Sprites/Prefabs/UI`. Directly referenced artwork remains under `Assets/Sprites/UI` even when a Resources prefab references it. Record the load key or reference owner in the Feature Spec, and verify runtime loading after normalization. Do not migrate existing assets without explicit scope.
+Before choosing a production path, read `Docs/Foundation/ResourceLoading.md`. Raw design sources go under `Assets/Art/DesignImports`, imported prefab drafts under `Assets/Prefabs/DesignImports`, path-loaded UI prefabs under `Assets/Resources/Prefabs/UI` (popups under `Popups`), and directly referenced prefabs under `Assets/Prefabs/UI`. Extracted Sprite images go under `Assets/Sprites/UI`; materials and ordinary textures belong under `Assets/Art`. A Resources prefab can reference both without copying dependencies. Popups load on first use and reuse their instance. Record the load key or reference owner in the Feature Spec, and verify runtime loading after normalization. Do not migrate existing assets without explicit scope.
 
 The direct root structure is `DimBackground` and `PopupContent`, plus only the optional roots declared by the active profile. Move body and script-bound nodes under `PopupContent`. `DimBackground` is full stretch, black, uses the configured alpha, and has raycast target enabled. Never retain `Container` as a permanent alias.
 

@@ -48,7 +48,7 @@ def parse_arguments() -> argparse.Namespace:
         default="",
         help="Optional Git repository URL; defaults to external local file dependencies",
     )
-    parser.add_argument("--ref", default="v0.6.0", help="Git branch, tag or commit")
+    parser.add_argument("--ref", default="v0.6.1", help="Git branch, tag or commit")
     return parser.parse_args()
 
 
@@ -273,11 +273,24 @@ def run_setup_wizard(editor: Path, project_root: Path) -> int:
         project_root / ".agents/skills/develop-foundation-feature/SKILL.md",
         project_root / ".agents/skills/normalize-figma-unity-ui/SKILL.md",
         project_root / "Docs/Features/FEATURE_TEMPLATE.md",
+        project_root / "Docs/Foundation/ProjectLayout.md",
+        project_root / "Docs/Foundation/ResourceLoading.md",
         project_root / "Docs/Features/smoke-feature.md",
         project_root / "Scripts/validate_game_foundation_project.py",
         project_root / ".github/workflows/game-foundation-governance.yml",
     )
     missing = [str(path) for path in expected if not path.is_file()]
+    expected_directories = (
+        "Assets/Resources/Prefabs/UI/Popups", "Assets/Resources/Sprites/UI", "Assets/Sprites/UI",
+        "Assets/Prefabs/UI", "Assets/Prefabs/DesignImports", "Assets/Art/Models",
+        "Assets/Art/Materials", "Assets/Art/Textures", "Assets/Art/Fonts", "Assets/Art/DesignImports",
+    )
+    missing.extend(str(project_root / path) for path in expected_directories if not (project_root / path).is_dir())
+    obsolete = [path for path in ("Assets/Sprites/Prefabs", "Assets/Sprites/DesignImports")
+                if (project_root / path).exists()]
+    if obsolete:
+        print(f"Setup Wizard generated obsolete resource roots: {obsolete}")
+        return 1
     setup_succeeded = log_contains(log_path, SETUP_SUCCESS_MARKER)
     if not setup_succeeded or missing:
         print(f"Setup Wizard failed or missed assets: {missing}")

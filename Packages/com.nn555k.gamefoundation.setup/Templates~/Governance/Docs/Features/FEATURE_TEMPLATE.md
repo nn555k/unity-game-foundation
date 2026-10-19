@@ -42,9 +42,11 @@ updated: {{DATE}}
 ## UI, prefab, scene, and Inspector impact
 
 - Affected assets: None
-- Loading mode and final paths: None (path-loaded UI/Prefab -> Assets/Resources; direct-reference UI/Prefab/art -> Assets/Sprites)
+- Loading mode and final paths: None (popups -> Assets/Resources/Prefabs/UI/Popups; direct prefabs -> Assets/Prefabs; non-Sprite art -> Assets/Art; Sprites -> Sprite assets only)
 - Resources keys or direct reference owners: None
 - Load/cache/instance cleanup responsibility: None
+- Popup first-use/reuse/missing-resource recovery and startup residency: None
+- Model deletion dependency audit (runtime, configuration, Editor inputs) and recovery: None
 - Hierarchy or binding changes: None
 - Inspector confirmation: None
 

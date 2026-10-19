@@ -45,7 +45,7 @@ UI Controller 只负责展示、输入转发和状态绑定。业务写操作继
 
 ## 扩展边界
 
-默认项目资源加载与目录约定见 `Docs/Foundation/ResourceLoading.md`（框架仓库内为 `Docs/ResourceLoading.md`）：按路径加载使用 Resources，直接引用的 UI / Prefab / 美术资源位于 `Assets/Sprites`。YooAsset 是独立的热更能力，不自动接管 UI 加载。
+默认项目资源加载与目录约定见 `Docs/Foundation/ResourceLoading.md`（框架仓库内为 `Docs/ResourceLoading.md`）：按路径加载使用 Resources，直接引用的 Prefab 位于 `Assets/Prefabs`，非精灵美术资源位于 `Assets/Art`，`Assets/Sprites` 只放 Sprite；弹窗默认在 `Assets/Resources/Prefabs/UI/Popups` 首次加载并复用。代码职责见 `ProjectLayout.md`。YooAsset 是独立的热更能力，不自动接管 UI 加载。
 
 出现跨项目都需要、与玩法无关且有稳定替换边界的能力时，才进入 Foundation。只有单个项目需要的功能先留在项目层；验证至少两个项目确实复用后，再抽取公共接口。
 

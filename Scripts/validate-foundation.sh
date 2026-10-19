@@ -8,6 +8,7 @@ python3 "${script_dir}/validate_repository.py"
 python3 "${script_dir}/sync_governance_templates.py" --check
 python3 "${script_dir}/test_validate_game_foundation_project.py"
 python3 "${script_dir}/test_onboarding_defaults.py"
+python3 "${script_dir}/test_resource_layout.py"
 "${repository_root}/.agents/skills/maintain-game-foundation/scripts/validate-foundation-boundaries.sh"
 
 for manifest in "${repository_root}"/Packages/com.nn555k.gamefoundation.*/package.json; do

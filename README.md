@@ -28,7 +28,7 @@ python3 Scripts/onboard_project.py --project /path/to/MyGame --project-name MyGa
 
 ```json
 {
-  "com.nn555k.gamefoundation.core": "https://github.com/nn555k/unity-game-foundation.git?path=/Packages/com.nn555k.gamefoundation.core#v0.6.0"
+  "com.nn555k.gamefoundation.core": "https://github.com/nn555k/unity-game-foundation.git?path=/Packages/com.nn555k.gamefoundation.core#v0.6.1"
 }
 ```
 
@@ -42,7 +42,7 @@ Save、HotUpdate 和 SDK 包都带有可从 Package Manager 导入的适配示�
 
 Setup 会把消费项目所需的 `AGENTS.md` 托管区块、`.agents/skills`、Foundation 文档与 Feature Spec 模板写入新项目。每个行为改动先建立 `Docs/Features/<feature-id>.md`，实现后由同一份规范驱动目录、QFramework、Prefab、编译、测试和 CI 验收。
 
-`v0.5.0` 起，默认 UI / Prefab 使用 Resources 按路径加载，直接引用的 UI / Prefab / 美术资源放在 `Assets/Sprites`。Setup 自动建立分类目录，但不搬迁旧资源、不替换旧加载代码。详细规则见 [资源加载规范](Docs/ResourceLoading.md)。
+`v0.6.1` 起，直接引用的 Prefab 放 `Assets/Prefabs`，模型、材质等非精灵美术资源放 `Assets/Art`，`Assets/Sprites` 只放 Sprite。弹窗默认放 `Assets/Resources/Prefabs/UI/Popups`，首次打开加载并复用。Setup 同步生成新目录、AGENTS、Skills、文档和校验器；不搬迁旧资源、不替换旧加载代码。详细规则见 [资源加载规范](Docs/ResourceLoading.md)。
 
 ## Validate
 
@@ -57,7 +57,7 @@ python3 Scripts/validate_clean_install.py
 ```bash
 python3 Scripts/validate_clean_install.py \
   --repository https://github.com/nn555k/unity-game-foundation.git \
-  --ref v0.6.0
+  --ref v0.6.1
 ```
 
 仓库自身是一个最小 Unity 验证工程。CI 配置见 `Docs/CI.md`。

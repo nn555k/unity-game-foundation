@@ -50,19 +50,24 @@ def validate_readiness(readiness: dict) -> None:
         raise RuntimeError("Base onboarding checks failed; inspect onboarding-report.json.")
 
 
-def main() -> int:
-    """Complete local onboarding; credentials and production vendor choices stay explicit in the report."""
+def parse_arguments() -> argparse.Namespace:
+    """Parse installation identity and the default release before any project mutation."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
     parser.add_argument("--project-name")
     parser.add_argument("--namespace", dest="namespace")
     parser.add_argument("--editor", default=EDITOR)
     parser.add_argument("--repository", default="https://github.com/nn555k/unity-game-foundation.git")
-    parser.add_argument("--ref", default="v0.6.0")
+    parser.add_argument("--ref", default="v0.6.1")
     parser.add_argument("--local-packages", action="store_true", help="Use this checkout for development verification")
     parser.add_argument("--content-root", default=None)
     parser.add_argument("--content-package", default=None)
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main() -> int:
+    """Complete local onboarding; credentials and production vendor choices stay explicit in the report."""
+    args = parse_arguments()
     project = Path(args.project).resolve()
     contract = project / ".gamefoundation/project.json"
     saved = json.loads(contract.read_text()) if contract.exists() else {}

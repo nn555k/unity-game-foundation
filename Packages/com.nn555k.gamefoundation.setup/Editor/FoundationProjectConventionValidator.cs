@@ -429,7 +429,7 @@ namespace GameFoundation.Setup.Editor
         }
 
         /// <summary>
-        /// Rejects ambiguous Resources keys without moving assets or guessing which references are dynamic.
+        /// Checks Sprite-only ownership and ambiguous Resources keys without moving or reimporting assets.
         /// </summary>
         private static void ValidateResourceLayout(string projectRoot, FoundationProjectConventionReport report)
         {
@@ -443,13 +443,18 @@ namespace GameFoundation.Setup.Editor
             {
                 var relative = ProjectRelative(projectRoot, path);
                 var parts = relative.Split('/');
-                if (parts.Contains("Editor") || parts.Any(part => part.StartsWith(".", StringComparison.Ordinal))) continue;
+                var isSpriteRoot = relative.StartsWith("Assets/Sprites/", StringComparison.Ordinal);
+                if (parts.Any(part => part.StartsWith(".", StringComparison.Ordinal))) continue;
+                if (parts.Contains("Editor") && !isSpriteRoot) continue;
                 if (Directory.Exists(path))
                 {
                     if (parts[parts.Length - 1] == "Resources" && relative.StartsWith("Assets/Sprites/", StringComparison.Ordinal))
                         report.AddError("Direct-reference Sprites tree must not contain Resources: " + relative);
                     continue;
                 }
+
+                if (isSpriteRoot && !string.Equals(Path.GetExtension(path), ".meta", StringComparison.OrdinalIgnoreCase))
+                    ValidateSpriteAsset(path, relative, report);
 
                 var resourceIndex = Array.IndexOf(parts, "Resources");
                 if (resourceIndex < 0 || ignoredExtensions.Contains(Path.GetExtension(path))) continue;
@@ -467,6 +472,27 @@ namespace GameFoundation.Setup.Editor
                 else
                     keys.Add(key, relative);
             }
+        }
+
+        /// <summary>
+        /// Accepts Sprite imports and native Sprite-only assets using serialized type evidence, without modifying importers.
+        /// </summary>
+        private static void ValidateSpriteAsset(string path, string relative, FoundationProjectConventionReport report)
+        {
+            var extension = Path.GetExtension(path).ToLowerInvariant();
+            if (extension == ".asset")
+            {
+                var headers = Regex.Matches(File.ReadAllText(path), @"^--- !u!(\d+)\s", RegexOptions.Multiline);
+                if (headers.Count > 0 && headers.Cast<Match>().All(match => match.Groups[1].Value == "213")) return;
+            }
+            else if (Regex.IsMatch(extension, @"^\.(png|jpg|jpeg|tga|psd|psb|tif|tiff|bmp|exr|hdr)$"))
+            {
+                var metaPath = path + ".meta";
+                var metadata = File.Exists(metaPath) ? File.ReadAllText(metaPath) : string.Empty;
+                if (metadata.Contains("TextureImporter:") &&
+                    Regex.IsMatch(metadata, @"^\s*textureType:\s*8\s*$", RegexOptions.Multiline)) return;
+            }
+            report.AddError("Assets/Sprites only accepts Sprite assets; use Assets/Prefabs or Assets/Art: " + relative);
         }
 
         /// <summary>

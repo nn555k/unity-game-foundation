@@ -8,9 +8,23 @@ import unittest
 
 from install_upm_packages import DEFAULT_SELECTION, resolve_selection, update_manifest
 from onboard_project import validate_readiness
+from unittest.mock import patch
+import onboard_project
+import install_upm_packages
+import validate_clean_install
 
 
 class OnboardingDefaultsTests(unittest.TestCase):
+    def test_default_refs_ship_current_governance(self):
+        """Fresh onboarding, direct install and external smoke tests must select the corrected release."""
+        for module in (onboard_project, install_upm_packages, validate_clean_install):
+            with self.subTest(module=module.__name__):
+                arguments = [module.__name__]
+                if module is not validate_clean_install:
+                    arguments += ["--project", "/tmp/foundation-default-ref-fixture"]
+                with patch("sys.argv", arguments):
+                    self.assertEqual("v0.6.1", module.parse_arguments().ref)
+
     def test_default_selection_excludes_figma(self):
         """Default installation keeps all seven base/provider packages but never opts into Figma."""
         selected = resolve_selection(DEFAULT_SELECTION)

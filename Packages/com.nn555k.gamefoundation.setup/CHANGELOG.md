@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 - 2026-10-19
+
+- Correct new-project typed resource roots, lazy-popup guidance, distributed governance and Sprite validation.
+
 ## 0.6.0 - 2026-10-09
 
 - Remove bundled design-tool installation, readiness inspection and provider dependencies; retain vendor-neutral UI normalization and developer-managed external integrations.

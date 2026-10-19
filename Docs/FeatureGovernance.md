@@ -51,7 +51,7 @@ The validator checks the generated project contract, centralized QFramework role
 
 Warnings identify ambiguous ownership for review; errors block completion. Unity compilation, tests, runtime behavior, screenshots, device SDK checks, and store/CDN verification remain separate evidence because static convention checks cannot prove them.
 
-UI/prefab/art requirements also follow `ResourceLoading.md`: record Resources keys or direct-reference owners before creation. Both validators reject duplicate Resources keys and Resources nested inside the direct-reference Sprites tree; they do not infer asset loading intent. Runtime load and dependency checks remain required for path-loaded assets.
+UI/prefab/art requirements also follow `ResourceLoading.md`: record Resources keys or direct-reference owners before creation. Both validators reject non-Sprite assets in Assets/Sprites, duplicate Resources keys and Resources nested inside the direct-reference Sprites tree; they do not infer asset loading intent. Runtime load and dependency checks remain required for path-loaded assets.
 
 ## Definition of Done
 

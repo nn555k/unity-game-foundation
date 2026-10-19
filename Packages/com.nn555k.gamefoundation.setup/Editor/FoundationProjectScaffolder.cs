@@ -28,7 +28,7 @@ namespace GameFoundation.Setup.Editor
         };
 
         /// <summary>
-        /// 生成项目自有架构、角色目录、程序集和 UI Profile，默认不覆盖既有文件。
+        /// 生成项目自有架构、角色与资源类型目录、程序集和 UI Profile，默认不覆盖或移动既有文件。
         /// </summary>
         public static FoundationProjectSetupReport Generate(FoundationProjectSetupOptions options)
         {
@@ -51,8 +51,14 @@ namespace GameFoundation.Setup.Editor
             EnsureAssetFolder("Assets/Resources/Prefabs/UI", report);
             EnsureAssetFolder("Assets/Resources/Sprites/UI", report);
             EnsureAssetFolder("Assets/Sprites/UI", report);
-            EnsureAssetFolder("Assets/Sprites/Prefabs/UI", report);
-            EnsureAssetFolder("Assets/Sprites/DesignImports", report);
+            EnsureAssetFolder("Assets/Resources/Prefabs/UI/Popups", report);
+            EnsureAssetFolder("Assets/Prefabs/UI", report);
+            EnsureAssetFolder("Assets/Prefabs/DesignImports", report);
+            EnsureAssetFolder("Assets/Art/Models", report);
+            EnsureAssetFolder("Assets/Art/Materials", report);
+            EnsureAssetFolder("Assets/Art/Textures", report);
+            EnsureAssetFolder("Assets/Art/Fonts", report);
+            EnsureAssetFolder("Assets/Art/DesignImports", report);
 
             WriteTextAsset(
                 codeRoot + "/Architecture/" + options.ProjectName + "App.cs",

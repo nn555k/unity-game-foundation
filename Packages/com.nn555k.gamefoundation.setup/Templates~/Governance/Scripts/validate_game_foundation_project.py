@@ -220,18 +220,22 @@ def parse_frontmatter(content: str) -> dict[str, str]:
 
 
 def validate_resource_layout(project_root: Path, report: ValidationReport) -> None:
-    """Reject ambiguous Resources keys without inferring load intent or moving legacy assets."""
+    """Enforce the project Sprite root and reject ambiguous Resources keys without moving assets."""
     assets_root = project_root / "Assets"
     keys: dict[str, str] = {}
     ignored_extensions = {".meta", ".cs", ".asmdef", ".asmref", ".dll"}
     for path in sorted(assets_root.rglob("*")):
         parts = path.relative_to(project_root).parts
-        if "Editor" in parts or any(part.startswith(".") for part in parts):
+        if any(part.startswith(".") for part in parts):
+            continue
+        if "Editor" in parts and parts[:2] != ("Assets", "Sprites"):
             continue
         if path.is_dir():
             if path.name == "Resources" and parts[:2] == ("Assets", "Sprites"):
                 report.error("Direct-reference Sprites tree must not contain Resources: " + "/".join(parts))
             continue
+        if parts[:2] == ("Assets", "Sprites") and path.suffix.lower() != ".meta":
+            validate_sprite_asset(project_root, path, report)
         if "Resources" not in parts or path.suffix.lower() in ignored_extensions:
             continue
         relative = "/".join(parts)
@@ -243,6 +247,24 @@ def validate_resource_layout(project_root: Path, report: ValidationReport) -> No
             report.error(f"Duplicate Resources key '{key}': {keys[key]} and {relative}")
         else:
             keys[key] = relative
+
+
+def validate_sprite_asset(project_root: Path, path: Path, report: ValidationReport) -> None:
+    """Accept imported Sprite images or standalone serialized Sprites, never unrelated art files."""
+    relative = path.relative_to(project_root).as_posix()
+    if path.suffix.lower() == ".asset":
+        # Unity native Sprite assets use class ID 213; mixed serialized assets require a different root.
+        headers = re.findall(r"^--- !u!(\d+)\s", path.read_text(encoding="utf-8", errors="replace"), re.MULTILINE)
+        if headers and all(value == "213" for value in headers):
+            return
+    else:
+        image_extensions = {".png", ".jpg", ".jpeg", ".tga", ".psd", ".psb", ".tif", ".tiff", ".bmp", ".exr", ".hdr"}
+        if path.suffix.lower() in image_extensions:
+            meta_path = Path(str(path) + ".meta")
+            metadata = meta_path.read_text(encoding="utf-8", errors="replace") if meta_path.is_file() else ""
+            if "TextureImporter:" in metadata and re.search(r"^\s*textureType:\s*8\s*$", metadata, re.MULTILINE):
+                return
+    report.error("Assets/Sprites only accepts Sprite assets; use Assets/Prefabs or Assets/Art: " + relative)
 
 
 def validate_feature_specs(project_root: Path, report: ValidationReport) -> list[Path]:

@@ -15,16 +15,18 @@ Read before behavior-changing work:
 
 - `.gamefoundation/project.json`
 - `Docs/Foundation/Architecture.md`
+- `Docs/Foundation/ProjectLayout.md`
 - `Docs/Features/README.md`
 - The related `Docs/Features/<feature-id>.md`
 
 ## Onboarding and repair
 
 - For AI-driven initial setup, follow `Docs/Foundation/NewProjectSetup.md` and the framework repository's `Scripts/onboard_project.py` entry point. Installing UPM references alone does not complete onboarding.
+- Existing architectures with different names require a project-specific adoption path; preserve the configured architecture and Controller instead of running the new-project generator to create another pair.
 - Reuse `.gamefoundation/project.json` on reruns. Never substitute `NewGame`, rename the project identity, or generate a second Architecture during setup/repair.
 - Read `.gamefoundation/onboarding-report.json` after compilation and provider validation. Distinguish local readiness from Figma credentials, CDN, SDK, and device tasks.
 - The configured content root is for explicitly selected hot-update content only; preserve existing YooAsset packages, groups, and collection rules. Default UI assets follow the Resources convention below.
-- The two Figma tools are developer-managed. Do not install, replace, or upgrade them during default onboarding. Their absence is not a base-readiness failure; UI and prefab conventions still apply.
+- Design import tools are developer-managed. Do not install, replace, or upgrade them during default onboarding. Their absence is not a base-readiness failure; UI and prefab conventions still apply.
 
 ## Required feature workflow
 
@@ -37,11 +39,14 @@ Read before behavior-changing work:
 ## Architecture
 
 - Keep centralized role folders directly under `{{CODE_ROOT}}`: `Commands`, `Models`, `Systems`, `Events`, `ViewControllers`, and `Utilities`.
+- Use `Docs/Foundation/ProjectLayout.md` to classify model-owned data, stateless algorithms, Unity presentation helpers and Editor tools by responsibility, not by their caller.
 - Add responsibility subfolders inside those role folders. Do not create feature folders containing another role tree.
 - Project state mutation belongs in QFramework Commands. ViewControllers and UI callbacks send Commands and render state; they do not mutate Models or Systems directly.
 - Shared project rules belong in Systems, persistent or observable state in Models, one-shot notifications in Events, Unity presentation in ViewControllers, and stateless bridges in Utilities.
 - Register dependencies only in `{{PROJECT_NAME}}App.Init`.
 - Cache QFramework dependencies during initialization. Runtime callbacks, refresh methods, animations, and analytics helpers must not repeatedly call `GetModel`, `GetSystem`, or `GetUtility`.
+- Commands resolve dependencies into local variables at execution setup. After edits, search changed files with `rg "GetModel<|GetSystem<|GetUtility<"` and inspect each remaining lookup.
+- Keep scene-bound components stable; use focused partial files when needed instead of adding components merely to split code.
 - Gameplay-facing MonoBehaviours should inherit `{{PROJECT_NAME}}Controller`.
 
 ## Foundation boundary
@@ -54,7 +59,10 @@ Read before behavior-changing work:
 ## Unity assets and UI
 
 - Read `Docs/Foundation/ResourceLoading.md` before creating UI or prefabs. Default path-based loading uses `Resources.Load<T>` / `Resources.LoadAsync<T>`, not YooAsset.
-- Put path-loaded UI prefabs under `Assets/Resources/Prefabs/UI` and path-loaded sprites under `Assets/Resources/Sprites/UI`. Put directly referenced UI art under `Assets/Sprites/UI`, directly referenced prefabs under `Assets/Sprites/Prefabs/UI`, and raw imports under `Assets/Sprites/DesignImports`.
+- Use `Assets/Prefabs` for direct-reference prefabs, `Assets/Art` for models, meshes, materials, shaders, ordinary textures, fonts and licenses, and `Assets/Sprites` only for Sprite images/assets, including native serialized Sprites. Determine Sprite ownership from Unity import/type; never alter import settings just to pass folder checks.
+- Path-loaded UI prefabs use `Assets/Resources/Prefabs/UI`; sprites use `Assets/Resources/Sprites/UI`. Design sources use `Assets/Art/DesignImports`, imported prefab drafts use `Assets/Prefabs/DesignImports`, and extracted Sprite images use `Assets/Sprites/UI`.
+- New popups use `Assets/Resources/Prefabs/UI/Popups`, with traceable configurable keys, first-use Resources loading and instance reuse. Do not retain startup hard references to all popups or eagerly load them all. Handle missing resources without blank modals or state changes; clean up on owner destruction.
+- Before authorized model deletion, audit reverse references, configuration, Resources strings and Editor source/baker paths. Hidden or optional configured assets are not unused. Keep a recoverable version or backup outside Assets.
 - Record the final asset path, Resources key or direct reference owner, and lifecycle in the Feature Spec. A Resources prefab may reference art outside Resources; do not duplicate or move its entire dependency tree.
 - Preserve existing resource paths unless migration is explicitly requested. Never automatically replace existing loaders or move Resources into YooAsset collectors.
 - Do not edit `.prefab`, `.unity`, or `.asset` files as text. Use Unity Editor APIs, Prefab Mode, or Unity MCP and read back exact values.

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.1 - 2026-10-19
+
+- New projects use Assets/Prefabs for direct-reference prefabs, Assets/Art for non-Sprite art and Assets/Sprites only for Sprite assets.
+- Popup guidance uses Resources/Prefabs/UI/Popups, first-use loading, reuse and explicit load-failure recovery.
+- Synchronize AGENTS, consumer Skills, Feature Specs, resource/architecture docs, Setup folders and Python/Unity type validation.
+- Document existing-architecture adoption, GUID/reference preservation and runtime/Editor model-dependency audits.
+- Default onboarding/install references now target v0.6.1. Runtime APIs, save formats and existing consumer assets are unchanged; all package versions align with this release.
+- Upgrade note: old non-Sprite files under Assets/Sprites now fail convention validation. Migrate only with explicit scope; Setup does not move them or overwrite project-owned files.
+
 ## 0.6.0 - 2026-10-09
 
 - Publish a clean framework-only repository without the two bundled design import/sync tools, their supporting assets or product links.

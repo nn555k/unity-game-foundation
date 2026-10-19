@@ -90,9 +90,9 @@ namespace GameFoundation.Setup.Editor.Tests
             {
                 AssetDatabase.CreateFolder("Assets", "__FoundationResourceFixture_" + id);
                 AssetDatabase.CreateFolder(rootPath, "Resources");
-                AssetDatabase.CreateFolder(rootPath, "Sprites");
+                AssetDatabase.CreateFolder(rootPath, "Art");
                 var texture = new Texture2D(2, 2) { name = "FixtureTexture" };
-                var artworkPath = rootPath + "/Sprites/Artwork.asset";
+                var artworkPath = rootPath + "/Art/Artwork.asset";
                 AssetDatabase.CreateAsset(texture, artworkPath);
                 var sprite = Sprite.Create(texture, new Rect(0f, 0f, 2f, 2f), Vector2.one * 0.5f);
                 sprite.name = "FixtureSprite";

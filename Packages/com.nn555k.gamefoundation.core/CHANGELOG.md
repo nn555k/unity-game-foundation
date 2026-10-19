@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 - 2026-10-19
+
+- Align package version with the Setup/governance release; runtime APIs and behavior are unchanged.
+
 ## 0.6.0 - 2026-10-09
 
 - Align with the framework-only public distribution. Runtime APIs, save formats and resource-loading behavior are unchanged.

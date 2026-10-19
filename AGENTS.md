@@ -27,7 +27,7 @@ Read first:
 
 ## Unity assets
 
-- Consumer UI/prefab creation follows `Docs/ResourceLoading.md`: Resources for path-loaded assets, `Assets/Sprites` for directly referenced UI/prefab/art assets. Preserve existing paths; do not migrate consumer assets automatically.
+- Consumer UI/prefab creation follows `Docs/ResourceLoading.md`: Resources for path-loaded assets and lazy popups; `Assets/Prefabs` for direct-reference prefabs, `Assets/Art` for non-Sprite art, and `Assets/Sprites` for Sprite assets only. Preserve existing paths; do not migrate consumer assets automatically.
 - Never edit `.prefab`, `.unity`, or `.asset` as text. Use Unity Editor APIs, Prefab Mode or Unity MCP.
 - Figma raw imports are not production prefabs. Preview normalization, preserve stable node IDs and references, then validate the production prefab.
 - Do not commit real product scenes or Figma pages to this repository.

@@ -84,7 +84,7 @@ namespace GameFoundation.Setup.Editor.Tests
             StringAssert.Contains("\"projectName\": \"SampleGame\"", json);
             StringAssert.Contains("Assets/Scripts/Game/Architecture/SampleGameApp.cs", json);
             StringAssert.Contains("Assets/Scripts/Game/Architecture/SampleGameController.cs", json);
-            StringAssert.Contains("\"generatedByVersion\": \"0.6.0\"", json);
+            StringAssert.Contains("\"generatedByVersion\": \"0.6.1\"", json);
         }
 
         /// <summary>Proves a repeated setup cannot silently replace the project identity even when overwrite is requested.</summary>
@@ -153,9 +153,48 @@ namespace GameFoundation.Setup.Editor.Tests
         {
             CreateValidGovernedProject();
             Write("Assets/Resources/UI/icon.txt", "fixture");
-            Write("Assets/Sprites/UI/icon.txt", "fixture");
+            Write("Assets/Art/Fonts/LICENSE.txt", "fixture");
             Write("Assets/Editor/Resources/UI/icon.txt", "fixture");
             Assert.That(FoundationProjectConventionValidator.Validate(mProjectRoot).Errors, Is.Empty);
+        }
+
+        /// <summary>Both importer-backed images and native serialized Sprites satisfy the Sprite-only root.</summary>
+        [Test]
+        public void ConventionValidatorAcceptsSpriteRepresentations()
+        {
+            CreateValidGovernedProject();
+            Write("Assets/Sprites/UI/Icon.png", "fixture");
+            Write("Assets/Sprites/UI/Icon.png.meta", "TextureImporter:\n  textureType: 8\n");
+            Write("Assets/Sprites/UI/Fragment.asset", "%YAML 1.1\n--- !u!213 &21300000\nSprite:\n");
+            Assert.That(FoundationProjectConventionValidator.Validate(mProjectRoot).Errors, Is.Empty);
+        }
+
+        /// <summary>Ordinary and normal-map textures cannot pass based on their file extension alone.</summary>
+        [TestCase(0)]
+        [TestCase(1)]
+        public void ConventionValidatorRejectsNonSpriteTextures(int textureType)
+        {
+            CreateValidGovernedProject();
+            Write("Assets/Sprites/UI/Surface.png", "fixture");
+            Write("Assets/Sprites/UI/Surface.png.meta", "TextureImporter:\n  textureType: " + textureType + "\n");
+            Assert.That(FoundationProjectConventionValidator.Validate(mProjectRoot).Errors,
+                Has.Some.Contains("only accepts Sprite assets"));
+        }
+
+        /// <summary>Prefabs, materials, model outputs and mixed serialized assets stay outside the Sprite-only tree.</summary>
+        [TestCase("Popup.prefab", "fixture")]
+        [TestCase("Model.fbx", "fixture")]
+        [TestCase("Paint.mat", "fixture")]
+        [TestCase("Font.ttf", "fixture")]
+        [TestCase("Mesh.asset", "--- !u!43 &4300000\nMesh:\n")]
+        [TestCase("Mixed.asset", "--- !u!213 &21300000\nSprite:\n--- !u!114 &11400000\nMonoBehaviour:\n")]
+        [TestCase("Editor/Popup.prefab", "fixture")]
+        public void ConventionValidatorRejectsOtherAssetsInSprites(string name, string content)
+        {
+            CreateValidGovernedProject();
+            Write("Assets/Sprites/" + name, content);
+            Assert.That(FoundationProjectConventionValidator.Validate(mProjectRoot).Errors,
+                Has.Some.Contains("only accepts Sprite assets"));
         }
 
         /// <summary>Case and extension differences must not hide duplicate keys in separate Resources roots.</summary>
