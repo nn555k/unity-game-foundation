@@ -19,6 +19,10 @@ namespace GameFoundation.Setup.Editor
             var options = new FoundationProjectSetupOptions
             {
                 ProjectName = data.projectName, RootNamespace = data.rootNamespace, CodeRoot = data.codeRoot,
+                IntegrationMode = string.IsNullOrEmpty(data.integrationMode) ? "generated" : data.integrationMode,
+                ArchitectureFile = data.architectureFile, ArchitectureType = data.architectureType,
+                ControllerFile = data.controllerFile, ControllerType = data.controllerType,
+                UiConventionProfilePath = data.uiConventionProfile,
                 CreateUiConventionProfile = !string.IsNullOrEmpty(data.uiConventionProfile),
                 ContentPackageName = string.IsNullOrEmpty(data.contentPackageName) ? "DefaultPackage" : data.contentPackageName,
                 ContentRoot = string.IsNullOrEmpty(data.contentRoot) ? "Assets/GameContent" : data.contentRoot
@@ -44,22 +48,70 @@ namespace GameFoundation.Setup.Editor
                 var existing = Load(root);
                 if (existing != null && (existing.ProjectName != options.ProjectName
                     || existing.RootNamespace != options.RootNamespace || existing.CodeRoot != options.CodeRoot
-                    || existing.ContentPackageName != options.ContentPackageName || existing.ContentRoot != options.ContentRoot))
+                    || existing.ContentPackageName != options.ContentPackageName || existing.ContentRoot != options.ContentRoot
+                    || existing.IntegrationMode != options.IntegrationMode
+                    || ArchitecturePath(existing) != ArchitecturePath(options) || ControllerPath(existing) != ControllerPath(options)
+                    || ArchitectureTypeName(existing) != ArchitectureTypeName(options) || ControllerTypeName(existing) != ControllerTypeName(options)
+                    || existing.CreateUiConventionProfile != options.CreateUiConventionProfile
+                    || (existing.CreateUiConventionProfile && UiProfilePath(existing) != UiProfilePath(options))))
                 {
                     report.AddError("Setup identity differs from the initialized project. Reuse .gamefoundation/project.json; migration is a separate operation.");
                     return;
                 }
                 var scripts = Path.Combine(root, "Assets/Scripts");
+                var expected = Path.GetFullPath(Path.Combine(root, ArchitecturePath(options)));
+                if (options.IntegrationMode == "existing-architecture")
+                {
+                    if (!File.Exists(expected) || !File.Exists(Path.Combine(root, ControllerPath(options))))
+                        report.AddError("Existing architecture and Controller files must exist before adoption.");
+                    else if (!Regex.IsMatch(FoundationProjectConventionValidator.CSharpDeclarations(File.ReadAllText(expected)),
+                        @":\s*(?:QFramework\.)?Architecture\s*<"))
+                        report.AddError("Configured architectureFile does not declare an Architecture<T>.");
+                }
                 if (!Directory.Exists(scripts)) return;
-                var expected = Path.GetFullPath(Path.Combine(root, options.CodeRoot, "Architecture", options.ProjectName + "App.cs"));
                 foreach (var file in Directory.GetFiles(scripts, "*.cs", SearchOption.AllDirectories))
                 {
                     if (Path.GetFullPath(file) != expected
-                        && Regex.IsMatch(File.ReadAllText(file), @":\s*(?:QFramework\.)?Architecture\s*<"))
+                        && Regex.IsMatch(FoundationProjectConventionValidator.CSharpDeclarations(File.ReadAllText(file)), @":\s*(?:QFramework\.)?Architecture\s*<"))
                         report.AddError("Another project Architecture already exists: " + file + ". Adopt or migrate it before Setup.");
                 }
             }
             catch (Exception exception) { report.AddError(exception.Message); }
+        }
+
+        /// <summary>Resolves the configured architecture source without renaming adopted project types.</summary>
+        internal static string ArchitecturePath(FoundationProjectSetupOptions options)
+        {
+            return string.IsNullOrEmpty(options.ArchitectureFile)
+                ? options.CodeRoot + "/Architecture/" + options.ProjectName + "App.cs" : options.ArchitectureFile;
+        }
+
+        /// <summary>Resolves the configured Controller source independently of new-project naming.</summary>
+        internal static string ControllerPath(FoundationProjectSetupOptions options)
+        {
+            return string.IsNullOrEmpty(options.ControllerFile)
+                ? options.CodeRoot + "/Architecture/" + options.ProjectName + "Controller.cs" : options.ControllerFile;
+        }
+
+        /// <summary>Older contracts can infer conventional type names from their explicitly recorded source files.</summary>
+        internal static string ArchitectureTypeName(FoundationProjectSetupOptions options)
+        {
+            return string.IsNullOrEmpty(options.ArchitectureType)
+                ? options.RootNamespace + "." + Path.GetFileNameWithoutExtension(ArchitecturePath(options)) : options.ArchitectureType;
+        }
+
+        /// <summary>Resolves the adopted Controller type for generated instructions and post-compile checks.</summary>
+        internal static string ControllerTypeName(FoundationProjectSetupOptions options)
+        {
+            return string.IsNullOrEmpty(options.ControllerType)
+                ? options.RootNamespace + "." + Path.GetFileNameWithoutExtension(ControllerPath(options)) : options.ControllerType;
+        }
+
+        /// <summary>Preserves a project's serialized UI profile path while retaining new-project defaults.</summary>
+        internal static string UiProfilePath(FoundationProjectSetupOptions options)
+        {
+            return string.IsNullOrEmpty(options.UiConventionProfilePath)
+                ? "Assets/Settings/GameFoundation/" + options.ProjectName + "UiPrefabConvention.asset" : options.UiConventionProfilePath;
         }
     }
 }

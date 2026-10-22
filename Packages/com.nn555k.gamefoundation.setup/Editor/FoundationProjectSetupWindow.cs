@@ -57,6 +57,11 @@ namespace GameFoundation.Setup.Editor
                 mOptions.ProjectName = EditorGUILayout.TextField("Project Name", mOptions.ProjectName);
                 mOptions.RootNamespace = EditorGUILayout.TextField("Root Namespace", mOptions.RootNamespace);
                 mOptions.CodeRoot = EditorGUILayout.TextField("Code Root", mOptions.CodeRoot);
+                if (mOptions.IntegrationMode == "existing-architecture")
+                {
+                    EditorGUILayout.TextField("Architecture", FoundationProjectIdentity.ArchitectureTypeName(mOptions));
+                    EditorGUILayout.TextField("Controller", FoundationProjectIdentity.ControllerTypeName(mOptions));
+                }
                 mOptions.ContentPackageName = EditorGUILayout.TextField("Content Package", mOptions.ContentPackageName);
                 mOptions.ContentRoot = EditorGUILayout.TextField("Content Root", mOptions.ContentRoot);
             }

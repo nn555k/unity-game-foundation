@@ -30,6 +30,8 @@ For UI/prefab/art work, read `Docs/Foundation/ResourceLoading.md`. Use Resources
 
 Change `Packages/com.nn555k.gamefoundation.*` only when the requirement is demonstrably generic across projects and the task explicitly includes evolving the shared framework. When that is true, switch to `$maintain-game-foundation` and validate compatibility separately.
 
+For UI mounting and authoring, follow `Docs/Foundation/UiLayers.md`, the project adoption in `UiLayers.Project.md` and `UiAuthoring.md`. Use the layer owner's sorting/input boundary, keep failure from disturbing the visible modal stack, and preserve unrelated Inspector values. Enter Play Mode for changed runtime boundaries; documentation-only edits do not require a runtime run.
+
 ## Completion report
 
 Link the Feature Spec and report changed scripts and assets, affected scenes/prefabs/components, why the ownership is correct, convention/compile/test evidence, performance considerations, and any Inspector fields that still require confirmation.

@@ -45,6 +45,11 @@ updated: {{DATE}}
 - Loading mode and final paths: None (popups -> Assets/Resources/Prefabs/UI/Popups; direct prefabs -> Assets/Prefabs; non-Sprite art -> Assets/Art; Sprites -> Sprite assets only)
 - Resources keys or direct reference owners: None
 - Load/cache/instance cleanup responsibility: None
+- UI layer contract/adoption: `Docs/Foundation/UiLayers.md` / `Docs/Foundation/UiLayers.Project.md` when UI is affected
+- Semantic layer and actual host: None
+- Modal open/return behavior: None (Replace or Stack; record actual supported APIs)
+- Input gate owner/release paths and non-uGUI input routing: None
+- Protected authored properties and allowed changes: None (see `Docs/Foundation/UiAuthoring.md`)
 - Popup first-use/reuse/missing-resource recovery and startup residency: None
 - Model deletion dependency audit (runtime, configuration, Editor inputs) and recovery: None
 - Hierarchy or binding changes: None
@@ -74,6 +79,7 @@ updated: {{DATE}}
 | Unity compilation | No new compiler errors | Pending |
 | Focused tests | EditMode/PlayMode test names or reason not applicable | Pending |
 | Runtime or asset behavior | Exact readback, logs, hierarchy, screenshot, or device evidence | Pending |
+| UI layers and authoring, when affected | Ordering, top-modal input, composed gates, failure/cleanup and preserved authored properties | Not applicable / Pending |
 | Performance | Allocation/lookup/subscription review when relevant | Pending |
 
 ## Definition of Done

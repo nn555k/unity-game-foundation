@@ -5,6 +5,12 @@ namespace GameFoundation.Setup.Editor
         public string ProjectName = string.Empty;
         public string RootNamespace = string.Empty;
         public string CodeRoot = "Assets/Scripts/Game";
+        public string IntegrationMode = "generated";
+        public string ArchitectureFile = string.Empty;
+        public string ArchitectureType = string.Empty;
+        public string ControllerFile = string.Empty;
+        public string ControllerType = string.Empty;
+        public string UiConventionProfilePath = string.Empty;
         public bool IncludeSave = true;
         public bool IncludeHotUpdate = true;
         public bool IncludeSdk = true;

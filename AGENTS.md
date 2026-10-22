@@ -32,6 +32,7 @@ Read first:
 - Figma raw imports are not production prefabs. Preview normalization, preserve stable node IDs and references, then validate the production prefab.
 - Do not commit real product scenes or Figma pages to this repository.
 - Keep Setup governance templates synchronized with their canonical Docs, Scripts, and consumer Skills by running `Scripts/sync_governance_templates.py --check`.
+- UI work follows `Docs/UiLayers.md` and `Docs/UiAuthoring.md`. Keep authored control fitting/text/overrides project-owned; Setup distributes the layer contract without importing production UI or project pause policies.
 - Figma access tokens and OAuth secrets are machine-local only; never serialize them into package assets or source.
 
 ## Code and performance

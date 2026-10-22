@@ -275,6 +275,9 @@ def run_setup_wizard(editor: Path, project_root: Path) -> int:
         project_root / "Docs/Features/FEATURE_TEMPLATE.md",
         project_root / "Docs/Foundation/ProjectLayout.md",
         project_root / "Docs/Foundation/ResourceLoading.md",
+        project_root / "Docs/Foundation/UiLayers.md",
+        project_root / "Docs/Foundation/UiLayers.Project.md",
+        project_root / "Docs/Foundation/UiAuthoring.md",
         project_root / "Docs/Features/smoke-feature.md",
         project_root / "Scripts/validate_game_foundation_project.py",
         project_root / ".github/workflows/game-foundation-governance.yml",
@@ -319,6 +322,51 @@ def run_setup_wizard(editor: Path, project_root: Path) -> int:
     return 0
 
 
+def validate_adoption_repair(editor: Path, project_root: Path, repository: str, git_ref: str) -> None:
+    """Repair a real compiled consumer with renamed source/types and assert project-owned bytes survive."""
+    config_path = project_root / ".gamefoundation/project.json"
+    config = json.loads(config_path.read_text())
+    code_root = project_root / config["codeRoot"]
+    architecture = code_root / "Architecture/SessionArchitecture.cs"
+    controller = code_root / "Architecture/SceneController.cs"
+    for old_name, new_path in (("SmokeGameApp", architecture), ("SmokeGameController", controller)):
+        original = code_root / f"Architecture/{old_name}.cs"
+        content = original.read_text().replace("SmokeGameApp", "SessionArchitecture").replace("SmokeGameController", "SceneController")
+        original.rename(new_path)
+        new_path.write_text(content)
+        old_meta = Path(str(original) + ".meta")
+        if old_meta.exists():
+            old_meta.rename(Path(str(new_path) + ".meta"))
+    config.update({"integrationMode": "existing-architecture",
+                   "architectureFile": architecture.relative_to(project_root).as_posix(),
+                   "architectureType": "Smoke.Game.SessionArchitecture",
+                   "controllerFile": controller.relative_to(project_root).as_posix(),
+                   "controllerType": "Smoke.Game.SceneController",
+                   "projectExtension": {"preserve": True}})
+    config_path.write_text(json.dumps(config, indent=2) + "\n")
+    agents_path = project_root / "AGENTS.md"
+    agents_path.write_text(agents_path.read_text().replace("<!-- GAME FOUNDATION MANAGED END -->",
+        "Project-authored rule inside a legacy managed block.\n<!-- GAME FOUNDATION MANAGED END -->")
+        + "\nProject-owned rule outside the managed block.\n")
+    protected = [config_path, agents_path, architecture, controller, code_root / "Smoke.Game.Game.asmdef",
+                 project_root / config["uiConventionProfile"],
+                 Path(str(project_root / config["uiConventionProfile"]) + ".meta")]
+    before = {path: path.read_bytes() for path in protected}
+    command = [sys.executable, str(REPOSITORY_ROOT / "Scripts/onboard_project.py"),
+               "--project", str(project_root), "--editor", str(editor)]
+    command += ["--repository", repository, "--ref", git_ref] if repository else ["--local-packages"]
+    subprocess.run(command, check=True)
+    for path, content in before.items():
+        if path.read_bytes() != content:
+            raise RuntimeError(f"Adoption repair changed project-owned content: {path}")
+    if (code_root / "Architecture/SmokeGameApp.cs").exists() or (code_root / "Architecture/SmokeGameController.cs").exists():
+        raise RuntimeError("Adoption generated a second App/Controller.")
+    proposed = (project_root / ".gamefoundation/AGENTS.managed.proposed.md").read_text()
+    if "Smoke.Game.SessionArchitecture" not in proposed or "Smoke.Game.SceneController" not in proposed:
+        raise RuntimeError("Managed proposal does not use the adopted types.")
+    print("Existing-architecture repair passed: compiled custom types; source/config/profile/rules preserved.")
+
+
 def main() -> int:
     """Create, test and automatically delete an isolated consumer project."""
     arguments = parse_arguments()
@@ -337,6 +385,7 @@ def main() -> int:
             time.sleep(1)
         exit_code = run_validation(Path(arguments.editor), project_root)
         if exit_code == 0:
+            validate_adoption_repair(Path(arguments.editor), project_root, arguments.repository, arguments.ref)
             print("Clean external package installation passed.")
         return exit_code
 

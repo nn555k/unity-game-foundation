@@ -29,6 +29,8 @@ For UI/prefab/art requirements, read `Docs/Foundation/ResourceLoading.md` and re
 
 A Feature Spec is not permission to broaden the request. Record deferred ideas under out-of-scope instead of implementing them. Do not mark a feature `Verified` until the listed evidence actually exists.
 
+For UI work, read `Docs/Foundation/UiLayers.md`, `Docs/Foundation/UiLayers.Project.md` and `Docs/Foundation/UiAuthoring.md`. Record the semantic host, Replace/Stack choice, input-gate owner, instance lifetime, failure recovery and which authored properties the request may change. Select layers by interaction responsibility; gameplay pause and product presentation policy stay project-owned.
+
 ## Completion report
 
 Link the Feature Spec, summarize ownership and acceptance criteria, state unresolved assumptions, and identify the next implementation or verification action.

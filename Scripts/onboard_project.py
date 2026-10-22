@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 from install_upm_packages import DEFAULT_SELECTION, PACKAGE_IDS, resolve_selection, update_manifest
+from validate_game_foundation_project import csharp_declarations
 
 ROOT = Path(__file__).resolve().parents[1]
 EDITOR = "/Applications/Unity/Hub/Editor/2022.3.62f2c1/Unity.app/Contents/MacOS/Unity"
@@ -92,7 +93,7 @@ def main() -> int:
         raise ValueError("Existing content identity differs; configuration migration is separate from onboarding.")
     expected_app = project / (saved.get("architectureFile") or f"Assets/Scripts/Game/Architecture/{name}App.cs")
     for source in (project / "Assets/Scripts").rglob("*.cs"):
-        if source != expected_app and re.search(r":\s*(?:QFramework\.)?Architecture\s*<", source.read_text(encoding="utf-8-sig")):
+        if source != expected_app and re.search(r":\s*(?:QFramework\.)?Architecture\s*<", csharp_declarations(source.read_text(encoding="utf-8-sig"))):
             raise ValueError(f"Another Architecture exists: {source}. Adopt or migrate it before onboarding.")
     if not Path(args.editor).is_file():
         raise FileNotFoundError(args.editor)

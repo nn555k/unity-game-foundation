@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Publish reusable seven-layer uGUI sorting/input/modal contracts, project adoption guidance and Inspector-owned control preservation rules through Setup, consumer Skills and Feature Specs.
+- Recognize partial QFramework roles in Python and Unity validators without treating comments or strings as inheritance.
+- Preserve locally modified/legacy AGENTS managed blocks with a review proposal and an installed-block hash; retain complete existing project configuration and UI profile identity during repair.
+- Add existing-architecture adoption using explicit source/type/profile identities without generating or overwriting an App, Controller or project asmdef. Runtime APIs, save formats and existing UI assets are unchanged; additive Setup options should ship in the next minor release.
+
 ## 0.6.1 - 2026-10-19
 
 - New projects use Assets/Prefabs for direct-reference prefabs, Assets/Art for non-Sprite art and Assets/Sprites only for Sprite assets.
