@@ -181,10 +181,10 @@ def validate_project_source_root(
 
 
 def validate_role_sources(project_root: Path, code_root: Path, report: ValidationReport) -> None:
-    """Flag high-confidence role violations and surface ambiguous declarations as warnings."""
+    """Check role ownership across partial declarations without treating comments as inheritance."""
     forbidden_utility_markers = ("AbstractCommand", "AbstractModel", "AbstractSystem")
     for source_path in (code_root / "Utilities").rglob("*.cs") if (code_root / "Utilities").is_dir() else ():
-        content = source_path.read_text(encoding="utf-8", errors="replace")
+        content = csharp_declarations(source_path.read_text(encoding="utf-8", errors="replace"))
         for marker in forbidden_utility_markers:
             if marker in content:
                 report.error(
@@ -196,13 +196,34 @@ def validate_role_sources(project_root: Path, code_root: Path, report: Validatio
         role_root = code_root / role
         if not role_root.is_dir():
             continue
-        for source_path in role_root.rglob("*.cs"):
-            content = source_path.read_text(encoding="utf-8", errors="replace")
-            if re.search(r"\bclass\s+\w+", content) and marker not in content:
+        declarations = []
+        role_types = set()
+        for source_path in sorted(role_root.rglob("*.cs")):
+            content = csharp_declarations(source_path.read_text(encoding="utf-8", errors="replace"))
+            namespaces = re.findall(r"\bnamespace\s+([\w.]+)\s*[;{]", content)
+            # Ambiguous scopes retain manual review instead of borrowing another type's base.
+            namespace = namespaces[0] if len(namespaces) == 1 else str(source_path)
+            pattern = r"((?:(?:public|internal|private|protected|abstract|sealed|static|partial)\s+)*)class\s+(\w+)(?:\s*<[^>{}]+>)?\s*(?::\s*([^{}]+))?\s*\{"
+            for match in re.finditer(pattern, content):
+                modifiers, name, bases = match.groups()
+                owns_role = bool(re.search(r"\b" + marker + r"\b", bases or ""))
+                partial = "partial" in modifiers.split()
+                key = (namespace, name)
+                declarations.append((source_path, name, key, owns_role, partial))
+                if owns_role and partial:
+                    role_types.add(key)
+        for source_path, name, key, owns_role, partial in declarations:
+            if not owns_role and not (partial and key in role_types):
                 report.warning(
-                    f"Review {role} ownership; class does not mention {marker}: "
+                    f"Review {role} ownership; {name} has no {marker} declaration: "
                     + source_path.relative_to(project_root).as_posix()
                 )
+
+
+def csharp_declarations(content: str) -> str:
+    """Mask comments and ordinary/verbatim strings before the conservative declaration scan."""
+    return re.sub(r'@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|//[^\n]*|/\*.*?\*/',
+                  lambda match: "\n" * match.group(0).count("\n") + " ", content, flags=re.DOTALL)
 
 
 def parse_frontmatter(content: str) -> dict[str, str]:

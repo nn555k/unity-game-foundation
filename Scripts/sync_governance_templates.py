@@ -51,6 +51,8 @@ def source_mappings() -> list[tuple[Path, Path]]:
         "IntegrationAdapters.md",
         "ResourceLoading.md",
         "ProjectLayout.md",
+        "UiLayers.md",
+        "UiAuthoring.md",
     ):
         mappings.append(
             (

@@ -8,8 +8,8 @@ Project configuration:
 - Project: `{{PROJECT_NAME}}`
 - Root namespace: `{{ROOT_NAMESPACE}}`
 - Code root: `{{CODE_ROOT}}`
-- Architecture: `{{ROOT_NAMESPACE}}.{{PROJECT_NAME}}App`
-- Controller base: `{{ROOT_NAMESPACE}}.{{PROJECT_NAME}}Controller`
+- Architecture: `{{ARCHITECTURE_TYPE}}`
+- Controller base: `{{CONTROLLER_TYPE}}`
 
 Read before behavior-changing work:
 
@@ -22,7 +22,8 @@ Read before behavior-changing work:
 ## Onboarding and repair
 
 - For AI-driven initial setup, follow `Docs/Foundation/NewProjectSetup.md` and the framework repository's `Scripts/onboard_project.py` entry point. Installing UPM references alone does not complete onboarding.
-- Existing architectures with different names require a project-specific adoption path; preserve the configured architecture and Controller instead of running the new-project generator to create another pair.
+- Existing architectures use `integrationMode: existing-architecture` and explicit architecture/controller paths and types in the project contract; repair preserves those sources and their asmdefs, including when overwrite is enabled.
+- Keep project-specific rules outside the managed AGENTS block. Modified or unrecognized legacy managed text is preserved; review `.gamefoundation/AGENTS.managed.proposed.md` and move local rules outside the markers before manually merging framework updates.
 - Reuse `.gamefoundation/project.json` on reruns. Never substitute `NewGame`, rename the project identity, or generate a second Architecture during setup/repair.
 - Read `.gamefoundation/onboarding-report.json` after compilation and provider validation. Distinguish local readiness from Figma credentials, CDN, SDK, and device tasks.
 - The configured content root is for explicitly selected hot-update content only; preserve existing YooAsset packages, groups, and collection rules. Default UI assets follow the Resources convention below.
@@ -43,11 +44,11 @@ Read before behavior-changing work:
 - Add responsibility subfolders inside those role folders. Do not create feature folders containing another role tree.
 - Project state mutation belongs in QFramework Commands. ViewControllers and UI callbacks send Commands and render state; they do not mutate Models or Systems directly.
 - Shared project rules belong in Systems, persistent or observable state in Models, one-shot notifications in Events, Unity presentation in ViewControllers, and stateless bridges in Utilities.
-- Register dependencies only in `{{PROJECT_NAME}}App.Init`.
+- Register dependencies only in the configured Architecture's `Init`.
 - Cache QFramework dependencies during initialization. Runtime callbacks, refresh methods, animations, and analytics helpers must not repeatedly call `GetModel`, `GetSystem`, or `GetUtility`.
 - Commands resolve dependencies into local variables at execution setup. After edits, search changed files with `rg "GetModel<|GetSystem<|GetUtility<"` and inspect each remaining lookup.
 - Keep scene-bound components stable; use focused partial files when needed instead of adding components merely to split code.
-- Gameplay-facing MonoBehaviours should inherit `{{PROJECT_NAME}}Controller`.
+- Gameplay-facing MonoBehaviours should inherit the configured Controller base.
 
 ## Foundation boundary
 
@@ -68,6 +69,8 @@ Read before behavior-changing work:
 - Do not edit `.prefab`, `.unity`, or `.asset` files as text. Use Unity Editor APIs, Prefab Mode, or Unity MCP and read back exact values.
 - Treat Figma output as raw design data. Normalize naming and hierarchy, preserve stable Figma binding IDs and references, then run the project prefab validator.
 - Preserve existing Inspector references and prefab overrides unless the Feature Spec explicitly authorizes structural changes.
+- Read `Docs/Foundation/UiAuthoring.md`: existing button Preserve Aspect and Image Type are authored choices; do not normalize them or rewrite static captions outside the requested boundary. Disabled tint, price labels and visual animation endpoints remain project policies.
+- Read `Docs/Foundation/UiLayers.md` and fill the project-owned `UiLayers.Project.md`: choose Pages / Panels / Popups / Guides / Effects / Toasts / Blockers by interaction responsibility. One layer owner controls Canvas sorting; Effects/Toasts never intercept input. Specify Replace/Stack, gate owners, lifecycle and failure recovery; gameplay pause/resume stays in project Commands/Systems.
 
 ## Completion gate
 

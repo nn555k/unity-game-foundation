@@ -46,6 +46,8 @@ Setup 会把消费项目所需的 `AGENTS.md` 托管区块、`.agents/skills`、
 
 ## Validate
 
+UI 分层、模态输入和 Inspector 保护分别见 [UiLayers](Docs/UiLayers.md)、[UiAuthoring](Docs/UiAuthoring.md)。Setup 会分发通用规范与项目接入模板；已有架构可使用显式类型/路径接入，修改过的 AGENTS 托管区会保留并生成待合并版本。使用方式见 [接入与修复](Docs/NewProjectSetup.md)。
+
 ```bash
 Scripts/validate-foundation.sh
 Scripts/run-unity-tests.sh

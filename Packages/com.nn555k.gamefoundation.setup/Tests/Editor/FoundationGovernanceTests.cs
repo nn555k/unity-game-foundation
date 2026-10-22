@@ -87,6 +87,85 @@ namespace GameFoundation.Setup.Editor.Tests
             StringAssert.Contains("\"generatedByVersion\": \"0.6.1\"", json);
         }
 
+        /// <summary>Only a known unmodified managed block can be automatically replaced by a newer template.</summary>
+        [Test]
+        public void ManagedUpdateProtectsLegacyAndLocallyModifiedRules()
+        {
+            var original = FoundationGovernanceBootstrap.ManagedStart + "\noriginal\n" + FoundationGovernanceBootstrap.ManagedEnd;
+            var proposed = original.Replace("original", "new framework rules");
+            var receipt = FoundationGovernanceBootstrap.ManagedAgentsHash(original);
+            Assert.That(FoundationGovernanceBootstrap.CanUpdateManagedAgents(original, proposed, receipt), Is.True);
+            Assert.That(FoundationGovernanceBootstrap.CanUpdateManagedAgents(original + "\nProject rules outside.\n", proposed, receipt), Is.True);
+            Assert.That(FoundationGovernanceBootstrap.CanUpdateManagedAgents(original, proposed, string.Empty), Is.False);
+            Assert.That(FoundationGovernanceBootstrap.CanUpdateManagedAgents(original.Replace("original", "local rule"), proposed, receipt), Is.False);
+            Assert.That(FoundationGovernanceBootstrap.CanUpdateManagedAgents(proposed, proposed, receipt), Is.True);
+        }
+
+        /// <summary>Saved project metadata survives repair byte-for-byte, including fields unknown to Setup.</summary>
+        [Test]
+        public void ConfigurationRepairPreservesExtensionMetadataEvenWithOverwrite()
+        {
+            const string original = "{\"projectName\":\"SampleGame\",\"customPolicy\":{\"keep\":true},\"foundationRevision\":\"recorded\"}\n";
+            Write(".gamefoundation/project.json", original);
+            var options = ValidOptions(); options.OverwriteExisting = true;
+            FoundationGovernanceBootstrap.PreserveOrCreateProjectConfiguration(mProjectRoot, options, new FoundationProjectSetupReport());
+            Assert.That(File.ReadAllText(Path.Combine(mProjectRoot, ".gamefoundation/project.json")), Is.EqualTo(original));
+        }
+
+        /// <summary>Adoption retains independently named files, types and profile instead of creating a second App.</summary>
+        [Test]
+        public void ExistingArchitectureIdentityLoadsAndValidates()
+        {
+            var options = ValidOptions();
+            options.IntegrationMode = "existing-architecture";
+            options.ArchitectureFile = "Assets/Scripts/Game/Architecture/SessionArchitecture.cs";
+            options.ArchitectureType = "Studio.Runtime.SessionArchitecture";
+            options.ControllerFile = "Assets/Scripts/Game/Architecture/SceneController.cs";
+            options.ControllerType = "Studio.Runtime.SceneController";
+            options.UiConventionProfilePath = "Assets/Settings/CustomUi.asset";
+            Write(options.ArchitectureFile, "namespace Studio.Runtime { class SessionArchitecture : QFramework.Architecture<SessionArchitecture> {} }");
+            Write(options.ControllerFile, "namespace Studio.Runtime { class SceneController {} }");
+            Write(".gamefoundation/project.json", FoundationGovernanceBootstrap.BuildProjectConfiguration(options));
+            var loaded = FoundationProjectIdentity.Load(mProjectRoot);
+            var report = new FoundationProjectSetupReport();
+            FoundationProjectIdentity.Validate(mProjectRoot, loaded, report);
+            Assert.That(report.Errors, Is.Empty);
+            Assert.That(FoundationProjectIdentity.ArchitectureTypeName(loaded), Is.EqualTo(options.ArchitectureType));
+            Assert.That(FoundationProjectIdentity.ControllerPath(loaded), Is.EqualTo(options.ControllerFile));
+            Assert.That(FoundationProjectIdentity.UiProfilePath(loaded), Is.EqualTo(options.UiConventionProfilePath));
+            loaded.ControllerType = "Wrong.Controller";
+            FoundationProjectIdentity.Validate(mProjectRoot, loaded, report);
+            Assert.That(report.Errors, Has.Some.Contains("identity differs"));
+        }
+
+        /// <summary>An adoption request never creates a replacement when its required source is missing.</summary>
+        [Test]
+        public void ExistingArchitectureRequiresBothSources()
+        {
+            var options = ValidOptions(); options.IntegrationMode = "existing-architecture";
+            var report = new FoundationProjectSetupReport();
+            FoundationProjectIdentity.Validate(mProjectRoot, options, report);
+            Assert.That(report.Errors, Has.Some.Contains("must exist before adoption"));
+        }
+
+        /// <summary>Unity and Python both recognize partial roles without accepting comments or unrelated names.</summary>
+        [Test]
+        public void RoleValidationResolvesPartialTypesAndIgnoresComments()
+        {
+            CreateValidGovernedProject();
+            Write("Assets/Scripts/Game/Systems/Board.cs", "namespace App { public partial class Board : AbstractSystem {} }");
+            Write("Assets/Scripts/Game/Systems/Board.Flow.cs", "namespace App { public partial class Board {} }");
+            Write("Assets/Scripts/Game/Utilities/Notes.cs", "// AbstractModel\n class Notes { string hint = \"AbstractSystem\"; }");
+            var report = FoundationProjectConventionValidator.Validate(mProjectRoot);
+            Assert.That(report.Warnings, Is.Empty);
+            Assert.That(report.Errors, Is.Empty);
+            Write("Assets/Scripts/Game/Systems/Other.cs", "namespace Other { partial class Board {} /* AbstractSystem */ }");
+            Write("Assets/Scripts/Game/Systems/Mixed.cs", "namespace App { partial class Board : AbstractSystem {} class Helper {} }");
+            report = FoundationProjectConventionValidator.Validate(mProjectRoot);
+            Assert.That(report.Warnings.Count, Is.EqualTo(2));
+            Assert.That(report.Warnings, Has.Some.Contains("Helper"));
+        }
+
         /// <summary>Proves a repeated setup cannot silently replace the project identity even when overwrite is requested.</summary>
         [Test]
         public void SetupRejectsDifferentIdentityBeforeWriting()

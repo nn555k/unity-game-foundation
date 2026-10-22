@@ -38,7 +38,7 @@ namespace GameFoundation.Setup.Editor.Tests
             var valid = FoundationProjectScaffolder.ValidateOptions(options, report);
 
             Assert.That(valid, Is.False);
-            Assert.That(report.Errors.Count, Is.EqualTo(1));
+            Assert.That(report.Errors, Has.Some.Contains("CodeRoot"));
         }
 
         /// <summary>Blank API options cannot silently generate a NewGame placeholder project.</summary>

@@ -36,6 +36,8 @@ ExamplePopup
 
 ## 同步安全
 
+导入后的视觉保护遵循 [UiAuthoring.md](UiAuthoring.md)：按钮 Preserve Aspect 和 Image Type 均为 authored 配置，未勾选 Preserve Aspect 不是错误。规范化仅修改拥有的结构字段，不能统一重写按钮文字、贴合方式或场景覆盖。挂载与排序遵循 [UiLayers.md](UiLayers.md)；Prefab 的 Overlay/Hud 等类型不是新的排序层。
+
 - 保留外部同步组件中的 File/Frame/Node ID；显示名不是同步主键。框架不要求特定的插件组件类型。
 - 默认只同步 Sprite 与颜色。文本内容、尺寸、坐标和激活状态需按页面显式开启。
 - 本地化文本不应被 Figma 文案覆盖。

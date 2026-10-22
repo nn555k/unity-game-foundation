@@ -281,7 +281,7 @@ namespace GameFoundation.Setup.Editor
                 var forbidden = new[] { "AbstractCommand", "AbstractModel", "AbstractSystem" };
                 for (var sourceIndex = 0; sourceIndex < utilitySources.Length; sourceIndex++)
                 {
-                    var content = File.ReadAllText(utilitySources[sourceIndex]);
+                    var content = CSharpDeclarations(File.ReadAllText(utilitySources[sourceIndex]));
                     for (var markerIndex = 0; markerIndex < forbidden.Length; markerIndex++)
                     {
                         if (content.Contains(forbidden[markerIndex]))
@@ -317,16 +317,36 @@ namespace GameFoundation.Setup.Editor
             }
 
             var sources = Directory.GetFiles(roleRoot, "*.cs", SearchOption.AllDirectories);
+            Array.Sort(sources, StringComparer.Ordinal);
+            var declarations = new List<(string Source, string Name, string Key, bool OwnsRole, bool Partial)>();
+            var partialRoles = new HashSet<string>(StringComparer.Ordinal);
             for (var index = 0; index < sources.Length; index++)
             {
-                var content = File.ReadAllText(sources[index]);
-                if (Regex.IsMatch(content, @"\bclass\s+\w+") && !content.Contains(marker))
+                var content = CSharpDeclarations(File.ReadAllText(sources[index]));
+                var namespaces = Regex.Matches(content, @"\bnamespace\s+([\w.]+)\s*[;{]");
+                var scope = namespaces.Count == 1 ? namespaces[0].Groups[1].Value : sources[index];
+                const string pattern = @"((?:(?:public|internal|private|protected|abstract|sealed|static|partial)\s+)*)class\s+(\w+)(?:\s*<[^>{}]+>)?\s*(?::\s*([^{}]+))?\s*\{";
+                foreach (Match declaration in Regex.Matches(content, pattern))
                 {
-                    report.AddWarning(
-                        "Review " + role + " ownership; class does not mention " + marker + ": "
-                        + ProjectRelative(projectRoot, sources[index]));
+                    var name = declaration.Groups[2].Value;
+                    var owns = Regex.IsMatch(declaration.Groups[3].Value, @"\b" + marker + @"\b");
+                    var partial = Regex.IsMatch(declaration.Groups[1].Value, @"\bpartial\b");
+                    var key = scope + ":" + name;
+                    declarations.Add((sources[index], name, key, owns, partial));
+                    if (owns && partial) partialRoles.Add(key);
                 }
             }
+            foreach (var declaration in declarations)
+                if (!declaration.OwnsRole && !(declaration.Partial && partialRoles.Contains(declaration.Key)))
+                    report.AddWarning("Review " + role + " ownership; " + declaration.Name + " has no " + marker
+                        + " declaration: " + ProjectRelative(projectRoot, declaration.Source));
+        }
+
+        /// <summary>Masks comments and ordinary/verbatim literals before conservative C# declaration checks.</summary>
+        internal static string CSharpDeclarations(string content)
+        {
+            return Regex.Replace(content, @"@""(?:""""|[^""])*""|""(?:\\.|[^""\\])*""|'(?:\\.|[^'\\])*'|//[^\n]*|/\*.*?\*/",
+                match => Regex.Replace(match.Value, "[^\n]", " "), RegexOptions.Singleline);
         }
 
         /// <summary>

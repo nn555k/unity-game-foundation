@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -47,11 +48,18 @@ namespace GameFoundation.Setup.Editor
                     report);
             }
 
+            PreserveOrCreateProjectConfiguration(projectRoot, options, report);
+        }
+
+        /// <summary>Repairs keep the complete saved contract, including project extension and provenance fields.</summary>
+        internal static void PreserveOrCreateProjectConfiguration(string projectRoot, FoundationProjectSetupOptions options,
+            FoundationProjectSetupReport report)
+        {
             WriteProjectFile(
                 Path.Combine(projectRoot, ".gamefoundation", "project.json"),
                 ".gamefoundation/project.json",
                 BuildProjectConfiguration(options),
-                true,
+                false,
                 report);
         }
 
@@ -68,10 +76,13 @@ namespace GameFoundation.Setup.Editor
                 projectName = options.ProjectName,
                 rootNamespace = options.RootNamespace,
                 codeRoot = codeRoot,
-                architectureFile = codeRoot + "/Architecture/" + options.ProjectName + "App.cs",
-                controllerFile = codeRoot + "/Architecture/" + options.ProjectName + "Controller.cs",
+                integrationMode = options.IntegrationMode,
+                architectureFile = FoundationProjectIdentity.ArchitecturePath(options),
+                architectureType = FoundationProjectIdentity.ArchitectureTypeName(options),
+                controllerFile = FoundationProjectIdentity.ControllerPath(options),
+                controllerType = FoundationProjectIdentity.ControllerTypeName(options),
                 uiConventionProfile = options.CreateUiConventionProfile
-                    ? "Assets/Settings/GameFoundation/" + options.ProjectName + "UiPrefabConvention.asset"
+                    ? FoundationProjectIdentity.UiProfilePath(options)
                     : string.Empty,
                 contentPackageName = options.ContentPackageName,
                 contentRoot = options.ContentRoot
@@ -116,6 +127,28 @@ namespace GameFoundation.Setup.Editor
             }
 
             return existing.TrimEnd() + "\n\n" + managedBlock.TrimEnd() + "\n";
+        }
+
+        /// <summary>Hashes only the managed block so project-owned text outside it never prevents a safe update.</summary>
+        internal static string ManagedAgentsHash(string content)
+        {
+            var start = content.IndexOf(ManagedStart, StringComparison.Ordinal);
+            var end = content.IndexOf(ManagedEnd, StringComparison.Ordinal);
+            if (start < 0 && end < 0) return string.Empty;
+            if (start < 0 || end < start || content.IndexOf(ManagedStart, start + ManagedStart.Length, StringComparison.Ordinal) >= 0
+                || content.IndexOf(ManagedEnd, end + ManagedEnd.Length, StringComparison.Ordinal) >= 0)
+                throw new InvalidOperationException("Existing AGENTS.md has incomplete or duplicate managed markers.");
+            using (var hash = SHA256.Create())
+                return BitConverter.ToString(hash.ComputeHash(Encoding.UTF8.GetBytes(
+                    content.Substring(start, end + ManagedEnd.Length - start)))).Replace("-", string.Empty).ToLowerInvariant();
+        }
+
+        /// <summary>Unknown legacy or locally modified managed text is preserved for an explicit manual merge.</summary>
+        internal static bool CanUpdateManagedAgents(string existing, string template, string installedHash)
+        {
+            var current = ManagedAgentsHash(existing);
+            return current.Length == 0 || current == ManagedAgentsHash(template)
+                || (!string.IsNullOrWhiteSpace(installedHash) && current == installedHash.Trim());
         }
 
         /// <summary>
@@ -173,8 +206,18 @@ namespace GameFoundation.Setup.Editor
             var targetPath = Path.Combine(projectRoot, "AGENTS.md");
             var template = ApplyProjectTokens(File.ReadAllText(sourcePath), options);
             var existing = File.Exists(targetPath) ? File.ReadAllText(targetPath) : string.Empty;
+            var receiptPath = Path.Combine(projectRoot, ".gamefoundation", "managed-agents.sha256");
+            var installedHash = File.Exists(receiptPath) ? File.ReadAllText(receiptPath) : string.Empty;
+            if (!CanUpdateManagedAgents(existing, template, installedHash))
+            {
+                WriteProjectFile(Path.Combine(projectRoot, ".gamefoundation", "AGENTS.managed.proposed.md"),
+                    ".gamefoundation/AGENTS.managed.proposed.md", template, true, report);
+                report.AddSkipped("AGENTS.md: locally modified or legacy managed block preserved; review .gamefoundation/AGENTS.managed.proposed.md.");
+                return;
+            }
             var merged = MergeManagedAgents(existing, template);
             WriteProjectFile(targetPath, "AGENTS.md", merged, true, report);
+            WriteProjectFile(receiptPath, ".gamefoundation/managed-agents.sha256", ManagedAgentsHash(template) + "\n", true, report);
         }
 
         /// <summary>
@@ -240,6 +283,8 @@ namespace GameFoundation.Setup.Editor
             return content
                 .Replace("{{PROJECT_NAME}}", options.ProjectName)
                 .Replace("{{ROOT_NAMESPACE}}", options.RootNamespace)
+                .Replace("{{ARCHITECTURE_TYPE}}", FoundationProjectIdentity.ArchitectureTypeName(options))
+                .Replace("{{CONTROLLER_TYPE}}", FoundationProjectIdentity.ControllerTypeName(options))
                 .Replace("{{CODE_ROOT}}", NormalizePath(options.CodeRoot));
         }
 
@@ -295,7 +340,10 @@ namespace GameFoundation.Setup.Editor
         public string rootNamespace;
         public string codeRoot;
         public string architectureFile;
+        public string integrationMode;
+        public string architectureType;
         public string controllerFile;
+        public string controllerType;
         public string uiConventionProfile;
         public string contentPackageName;
         public string contentRoot;

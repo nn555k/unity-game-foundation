@@ -48,9 +48,13 @@ namespace GameFoundation.Setup.Editor
                 throw;
             }
             var result = Inspect(options, false);
-            var appType = FindType(options.RootNamespace + "." + options.ProjectName + "App");
-            result.checks.Add(new OnboardingCheck("compiledArchitecture", appType == null ? "failed" : "ready",
-                appType == null ? "Generated architecture did not compile." : appType.FullName));
+            var appType = FindType(FoundationProjectIdentity.ArchitectureTypeName(options));
+            var validApp = appType != null && typeof(QFramework.IArchitecture).IsAssignableFrom(appType);
+            result.checks.Add(new OnboardingCheck("compiledArchitecture", validApp ? "ready" : "failed",
+                validApp ? appType.FullName : "Configured architecture did not compile as IArchitecture."));
+            var controllerType = FindType(FoundationProjectIdentity.ControllerTypeName(options));
+            result.checks.Add(new OnboardingCheck("compiledController", controllerType != null ? "ready" : "failed",
+                controllerType == null ? "Configured Controller did not compile." : controllerType.FullName));
             result.localReady = result.checks.TrueForAll(check => check.status != "failed");
             if (!result.localReady) result.stage = "failed";
             WriteReport(result);
@@ -67,7 +71,7 @@ namespace GameFoundation.Setup.Editor
                 prepare ? "Prepare" : "Validate", new object[] { options.ContentPackageName, options.ContentRoot });
             if (options.CreateUiConventionProfile)
             {
-                var path = "Assets/Settings/GameFoundation/" + options.ProjectName + "UiPrefabConvention.asset";
+                var path = FoundationProjectIdentity.UiProfilePath(options);
                 var profile = AssetDatabase.LoadAssetAtPath<GameFoundation.UI.UiPrefabConventionProfile>(path);
                 report.checks.Add(new OnboardingCheck("uiProfile", profile == null ? "failed" : "ready", path));
             }

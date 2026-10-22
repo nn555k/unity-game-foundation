@@ -17,7 +17,28 @@ python3 Scripts/onboard_project.py \
 
 初始化后的项目再次运行只需 `--project`。名称、命名空间、代码目录从 `.gamefoundation/project.json` 读取。不同项目身份或重复 Architecture 会在 Setup 写入前被拒绝；已有项目代码、Prefab 和采集规则不被覆盖。旧版本误生成多个 App 时，需要先明确保留哪个架构并迁移，再继续接入。
 
-已有自有架构的工程先核对配置中的 architectureFile/controllerFile。当前生成器使用 `<ProjectName>App` / `<ProjectName>Controller`；若已有类型不符，应走项目专用接入流程并复用已有架构，不改名、不用新项目向导制造第二个入口。仅安装包不代表完成接入。
+已有自有架构的工程在 `.gamefoundation/project.json` 中使用 `integrationMode: existing-architecture`，明确 `architectureFile`、`architectureType`、`controllerFile`、`controllerType`、`codeRoot` 和项目身份后，使用相同接入入口。Setup 验证唯一架构，保留已有 Architecture、Controller、asmdef 和配置原文，重编译后按配置类型检查，不生成或重写第二套入口；即使开启 overwrite 也不覆盖接入的代码。已有入口继续负责注册项目选择的 Foundation 模块。旧配置没有类型名时按命名空间与已记录源文件名推导；文件名与类型不同时必须明确填写类型。
+
+示例（这些文件必须已经存在，类名与路径由项目填写）：
+
+```json
+{
+  "schemaVersion": 1,
+  "projectName": "Example",
+  "rootNamespace": "Studio.Example",
+  "codeRoot": "Assets/Scripts/Game",
+  "integrationMode": "existing-architecture",
+  "architectureFile": "Assets/Scripts/Game/Architecture/SessionArchitecture.cs",
+  "architectureType": "Studio.Example.SessionArchitecture",
+  "controllerFile": "Assets/Scripts/Game/Architecture/SceneController.cs",
+  "controllerType": "Studio.Example.SceneController",
+  "uiConventionProfile": "Assets/Settings/GameFoundation/ExampleUiPrefabConvention.asset",
+  "contentPackageName": "DefaultPackage",
+  "contentRoot": "Assets/GameContent"
+}
+```
+
+直接调用 Editor Setup API 时也可设置对应 `IntegrationMode`、`ArchitectureFile/Type`、`ControllerFile/Type` 与 `UiConventionProfilePath`。已有工程的修复从配置读取这些值；BatchMode 首次接入可用 `GAME_FOUNDATION_INTEGRATION_MODE`、`GAME_FOUNDATION_ARCHITECTURE_FILE/TYPE`、`GAME_FOUNDATION_CONTROLLER_FILE/TYPE`。只安装包不代表完成接入。
 
 默认资源结构：
 
@@ -60,7 +81,7 @@ Unity 菜单 `Project Setup` 会读取并锁定已初始化的项目身份，按
 
 默认安装脚本包含 YooAsset，不包含设计导入工具；需要最小安装时显式传入 `--include core,save,ui`。已有 Setup 的项目可以通过 `Game Foundation/Install Optional Tools/Recommended All` 补装 YooAsset。`--include figma` 已不再支持；外部设计工具应通过开发者选择的独立来源接入。
 
-若希望用界面初始化完整项目，安装 `com.nn555k.gamefoundation.setup`，然后打开 `Game Foundation/Project Setup`。除 App、Controller、角色目录、asmdef 与 UI Profile 外，工具默认还会安装治理配置、`AGENTS.md` 托管区块、AI Skills、Feature Spec 模板、项目校验脚本和 GitHub CI。既有项目指令会被保留；只有 Foundation 管理区块会幂等更新。
+若希望用界面初始化完整项目，安装 `com.nn555k.gamefoundation.setup`，然后打开 `Game Foundation/Project Setup`。除新工程的 App、Controller、角色目录、asmdef 与 UI Profile 外，工具默认还会安装治理配置、`AGENTS.md` 托管区块、AI Skills、Feature Spec 模板、项目校验脚本和 GitHub CI。既有 UI Profile 保留 GUID 与 authored 配置；修复不会重建它。托管区块通过安装摘要判断是否可自动更新；存在项目编辑或未知旧版本时保留原文并输出 `.gamefoundation/AGENTS.managed.proposed.md`，人工合并后再修复。项目自有规则放在托管标记之外，详情见 `FeatureGovernance.md`。
 
 建议保留 Setup 包，以便使用 `Game Foundation/Feature Workflow/New Feature Specification` 和 `Game Foundation/Validate Project Conventions`。详细流程见 `Docs/Foundation/FeatureGovernance.md`。
 
@@ -107,6 +128,8 @@ Assets/Scripts/Game/
 具体功能按职责放到这些目录的子目录，不要再创建一套模块内 `Models/Systems/Commands`。
 
 ## 4. 配置 UI 规范
+
+生产 UI 使用 `UiLayers.md` 的七层契约，在 `UiLayers.Project.md` 中记录项目宿主、接口、输入、相机/缩放和生命周期；按钮等 Inspector 配置遵循 `UiAuthoring.md`。Setup 仅分发文档与模板，不建立生产页面，也不声明默认 Router 已支持 Stack。
 
 Setup Wizard 会创建一个 `UiPrefabConventionProfile` 资产，用于定义项目的 Popup、Page、Hud、Overlay、Item 和 Component 规则，也可以通过 `Create > Game Foundation > UI Prefab Convention` 手动创建。
 

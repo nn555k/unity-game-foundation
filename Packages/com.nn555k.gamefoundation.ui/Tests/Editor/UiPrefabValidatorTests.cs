@@ -3,6 +3,7 @@ using GameFoundation.UI.Editor;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameFoundation.UI.Tests
 {
@@ -62,6 +63,41 @@ namespace GameFoundation.UI.Tests
 
             Assert.That(result.Validation.IsValid, Is.True, result.Validation.ToMultilineString());
             Assert.That(result.Actions.Count, Is.GreaterThan(0));
+        }
+
+        /// <summary>Structural normalization preserves both authored fitting choices and unrelated button presentation/input.</summary>
+        [TestCase(false, Image.Type.Simple)]
+        [TestCase(true, Image.Type.Sliced)]
+        public void NormalizePreservesAuthoredButtonSettings(bool preserveAspect, Image.Type imageType)
+        {
+            var root = new GameObject("ImportedPopup", typeof(RectTransform));
+            var buttonObject = new GameObject("AuthoredAction", typeof(RectTransform), typeof(Image), typeof(Button));
+            buttonObject.transform.SetParent(root.transform, false);
+            var image = buttonObject.GetComponent<Image>();
+            image.preserveAspect = preserveAspect; image.type = imageType;
+            image.color = new Color(.3f, .5f, .7f, .9f);
+            var button = buttonObject.GetComponent<Button>();
+            button.interactable = false;
+            var colors = button.colors; colors.disabledColor = Color.magenta; button.colors = colors;
+            var label = new GameObject("Caption", typeof(RectTransform), typeof(Text));
+            label.transform.SetParent(buttonObject.transform, false);
+            label.GetComponent<Text>().text = "Project-authored caption";
+            PrefabUtility.SaveAsPrefabAsset(root, TestPrefabPath);
+            Object.DestroyImmediate(root);
+            var before = File.ReadAllBytes(TestPrefabPath);
+            FigmaPrefabNormalizer.Preview(TestPrefabPath, mProfile, UiPrefabKind.Popup);
+            CollectionAssert.AreEqual(before, File.ReadAllBytes(TestPrefabPath));
+            var result = FigmaPrefabNormalizer.Apply(TestPrefabPath, mProfile, UiPrefabKind.Popup);
+            Assert.That(result.Validation.IsValid, Is.True);
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(TestPrefabPath);
+            button = prefab.GetComponentInChildren<Button>(true);
+            image = button.GetComponent<Image>();
+            Assert.That(image.preserveAspect, Is.EqualTo(preserveAspect));
+            Assert.That(image.type, Is.EqualTo(imageType));
+            Assert.That(image.color, Is.EqualTo(new Color(.3f, .5f, .7f, .9f)));
+            Assert.That(button.interactable, Is.False);
+            Assert.That(button.colors.disabledColor, Is.EqualTo(Color.magenta));
+            Assert.That(button.GetComponentInChildren<Text>(true).text, Is.EqualTo("Project-authored caption"));
         }
 
         /// <summary>

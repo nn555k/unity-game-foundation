@@ -60,24 +60,15 @@ namespace GameFoundation.Setup.Editor
             EnsureAssetFolder("Assets/Art/Fonts", report);
             EnsureAssetFolder("Assets/Art/DesignImports", report);
 
-            WriteTextAsset(
-                codeRoot + "/Architecture/" + options.ProjectName + "App.cs",
-                BuildArchitectureSource(options),
-                options.OverwriteExisting,
-                report);
-            WriteTextAsset(
-                codeRoot + "/Architecture/" + options.ProjectName + "Controller.cs",
-                BuildControllerSource(options),
-                options.OverwriteExisting,
-                report);
-
-            if (options.CreateAssemblyDefinition)
+            if (options.IntegrationMode != "existing-architecture")
             {
                 WriteTextAsset(
-                    codeRoot + "/" + options.RootNamespace + ".Game.asmdef",
-                    BuildAssemblyDefinition(options),
-                    options.OverwriteExisting,
-                    report);
+                    FoundationProjectIdentity.ArchitecturePath(options), BuildArchitectureSource(options), options.OverwriteExisting, report);
+                WriteTextAsset(
+                    FoundationProjectIdentity.ControllerPath(options), BuildControllerSource(options), options.OverwriteExisting, report);
+                if (options.CreateAssemblyDefinition)
+                    WriteTextAsset(codeRoot + "/" + options.RootNamespace + ".Game.asmdef",
+                        BuildAssemblyDefinition(options), options.OverwriteExisting, report);
             }
 
             if (options.CreateUiConventionProfile)
@@ -139,6 +130,29 @@ namespace GameFoundation.Setup.Editor
                 report.AddError("ContentRoot must be a dedicated child folder under Assets, outside Resources.");
             if (!Identifier.IsMatch(options.ContentPackageName ?? string.Empty))
                 report.AddError("ContentPackageName must be a valid identifier.");
+
+            if (options.IntegrationMode != "generated" && options.IntegrationMode != "existing-architecture")
+                report.AddError("IntegrationMode must be generated or existing-architecture.");
+            foreach (var path in new[] { FoundationProjectIdentity.ArchitecturePath(options), FoundationProjectIdentity.ControllerPath(options) })
+                if (!path.StartsWith(codeRoot + "/", StringComparison.Ordinal) || !path.EndsWith(".cs", StringComparison.Ordinal)
+                    || path.Contains("..") || path.Contains(":") || path.Contains("\\"))
+                    report.AddError("Architecture/Controller sources must be .cs paths inside CodeRoot.");
+            if (!IsValidNamespace(FoundationProjectIdentity.ArchitectureTypeName(options))
+                || !IsValidNamespace(FoundationProjectIdentity.ControllerTypeName(options)))
+                report.AddError("Architecture and Controller types must be fully qualified C# names.");
+            if (options.IntegrationMode == "generated"
+                && (FoundationProjectIdentity.ArchitecturePath(options) != codeRoot + "/Architecture/" + options.ProjectName + "App.cs"
+                    || FoundationProjectIdentity.ControllerPath(options) != codeRoot + "/Architecture/" + options.ProjectName + "Controller.cs"
+                    || FoundationProjectIdentity.ArchitectureTypeName(options) != options.RootNamespace + "." + options.ProjectName + "App"
+                    || FoundationProjectIdentity.ControllerTypeName(options) != options.RootNamespace + "." + options.ProjectName + "Controller"))
+                report.AddError("Custom architecture identity requires existing-architecture mode.");
+            if (options.CreateUiConventionProfile)
+            {
+                var profilePath = FoundationProjectIdentity.UiProfilePath(options);
+                if (!profilePath.StartsWith("Assets/", StringComparison.Ordinal) || !profilePath.EndsWith(".asset", StringComparison.Ordinal)
+                    || profilePath.Contains("..") || profilePath.Contains(":") || profilePath.Contains("\\"))
+                    report.AddError("UI profile must be an .asset path under Assets.");
+            }
 
             return report.Success;
         }
@@ -324,20 +338,18 @@ namespace GameFoundation.Setup.Editor
             FoundationProjectSetupOptions options,
             FoundationProjectSetupReport report)
         {
-            const string folder = "Assets/Settings/GameFoundation";
+            var assetPath = FoundationProjectIdentity.UiProfilePath(options);
+            var folder = Path.GetDirectoryName(assetPath).Replace('\\', '/');
             EnsureAssetFolder(folder, report);
-            var assetPath = folder + "/" + options.ProjectName + "UiPrefabConvention.asset";
             var existing = AssetDatabase.LoadAssetAtPath<UiPrefabConventionProfile>(assetPath);
-            if (existing && !options.OverwriteExisting)
+            if (existing)
             {
                 report.AddSkipped(assetPath);
                 return;
             }
 
-            if (existing)
-            {
-                AssetDatabase.DeleteAsset(assetPath);
-            }
+            if (File.Exists(ToFullPath(assetPath)))
+                throw new InvalidOperationException("UI profile path is occupied by an incompatible asset: " + assetPath);
 
             var profile = ScriptableObject.CreateInstance<UiPrefabConventionProfile>();
             AssetDatabase.CreateAsset(profile, assetPath);

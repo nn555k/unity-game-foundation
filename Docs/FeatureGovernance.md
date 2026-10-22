@@ -15,6 +15,8 @@ Game Foundation separates reusable infrastructure from project behavior and give
 
 Existing project instructions are preserved. Setup only replaces the content between `GAME FOUNDATION MANAGED` markers; other generated files are preserved unless overwrite is explicitly enabled.
 
+Setup records the installed managed-block SHA-256 in `.gamefoundation/managed-agents.sha256`. If the block has local edits or comes from an unrecognized legacy installation, repair preserves AGENTS and writes `.gamefoundation/AGENTS.managed.proposed.md` for manual review, even with overwrite enabled. Keep project rules outside the markers; after a reviewed merge matches the current template, the next repair records its receipt. Existing `.gamefoundation/project.json` is preserved byte-for-byte, including extension metadata; identity changes require a separate migration. Missing governance documents are added; existing documents/Skills still need reviewed merging.
+
 ## Requirement lifecycle
 
 ```text
@@ -52,6 +54,8 @@ The validator checks the generated project contract, centralized QFramework role
 Warnings identify ambiguous ownership for review; errors block completion. Unity compilation, tests, runtime behavior, screenshots, device SDK checks, and store/CDN verification remain separate evidence because static convention checks cannot prove them.
 
 UI/prefab/art requirements also follow `ResourceLoading.md`: record Resources keys or direct-reference owners before creation. Both validators reject non-Sprite assets in Assets/Sprites, duplicate Resources keys and Resources nested inside the direct-reference Sprites tree; they do not infer asset loading intent. Runtime load and dependency checks remain required for path-loaded assets.
+
+UI work also follows `UiLayers.md`, the project-owned `UiLayers.Project.md` mapping and `UiAuthoring.md`. The Feature Spec records the semantic host, modal mode, gate/lifetime owner, failure recovery and protected authored properties. These documents are design and verification contracts; installing them is not proof of runtime adoption.
 
 ## Definition of Done
 
