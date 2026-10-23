@@ -26,6 +26,8 @@ Read repository `AGENTS.md`, `.gamefoundation/project.json`, `Docs/Foundation/Ar
 
 ## Decision rule
 
+For SDK initialization, attribution or identity work, read `Docs/Foundation/SdkInitialization.md` and update `Docs/Integrations/SdkInitializationChecklist.md`. If the project uses ThinkingData with Adjust, implement explicit readiness/identity gates before Adjust initialization, test failure and identity changes, and distinguish client evidence from real server postback ingestion. Do not install unused vendors or treat ordering alone as readiness.
+
 For UI/prefab/art work, read `Docs/Foundation/ResourceLoading.md`. Use Resources for path loading; put its targets under `Assets/Resources`. Direct-reference prefabs belong under `Assets/Prefabs`, non-Sprite art under `Assets/Art`, and only Sprite images/assets under `Assets/Sprites`. New popups use `Assets/Resources/Prefabs/UI/Popups`, first-use loading, cached instances and explicit failure handling; do not preload all popups from the startup HUD. Record paths, load keys/reference owners and lifecycle in the Feature Spec before creation. Preserve existing loaders and paths; do not auto-migrate them to YooAsset.
 
 Change `Packages/com.nn555k.gamefoundation.*` only when the requirement is demonstrably generic across projects and the task explicitly includes evolving the shared framework. When that is true, switch to `$maintain-game-foundation` and validate compatibility separately.

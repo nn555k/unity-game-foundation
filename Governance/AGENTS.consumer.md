@@ -57,6 +57,13 @@ Read before behavior-changing work:
 - Do not edit `Packages/com.nn555k.gamefoundation.*` for a project-only requirement.
 - Do not place vendor credentials, product URLs, production prefabs, or project state inside Foundation packages.
 
+## SDK initialization and attribution
+
+- For SDK initialization, attribution, or identity changes, read `Docs/Foundation/SdkInitialization.md` and update `Docs/Integrations/SdkInitializationChecklist.md` plus the related Feature Spec. Unused vendors do not need installing.
+- When combining ThinkingData and Adjust, initialize ThinkingData, obtain its real identity, bind callbacks and synchronize Adjust callback parameters, then initialize Adjust. Explicitly block this dependent path on missing consent, failure, or empty distinct ID; `SdkHost.Order` alone is not a readiness gate.
+- Keep a single identity synchronization owner, including login, logout and account switches. Keep vendor implementation and credentials in the project layer.
+- Verify client startup, client attribution, and actual Adjust-to-ThinkingData server ingestion separately. Static convention checks or a client diagnostic event cannot prove server postback success. Leave unavailable device/backend checks unverified.
+
 ## Unity assets and UI
 
 - Read `Docs/Foundation/ResourceLoading.md` before creating UI or prefabs. Default path-based loading uses `Resources.Load<T>` / `Resources.LoadAsync<T>`, not YooAsset.

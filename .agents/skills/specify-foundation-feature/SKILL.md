@@ -25,6 +25,8 @@ Read repository `AGENTS.md`, `.gamefoundation/project.json`, `Docs/Foundation/Ar
 
 ## Boundary
 
+For SDK initialization, attribution or identity requirements, read `Docs/Foundation/SdkInitialization.md`. Record the actual vendor versions, initialization dependencies, identity sources and synchronization owner, consent/failure behavior, and separate local/device/server acceptance evidence in the Feature Spec and `Docs/Integrations/SdkInitializationChecklist.md`. Do not impose ThinkingData/Adjust on projects that do not use them.
+
 For UI/prefab/art requirements, read `Docs/Foundation/ResourceLoading.md` and record whether each asset is path-loaded through Resources or directly referenced. Specify its typed root (Prefabs / Art / Sprite-only Sprites, or Resources), final path, load key/reference owner, cache and instance-cleanup responsibility. For popups, include first-use loading, reuse, missing-resource recovery and startup residency checks. For model removal, include runtime and Editor dependency evidence. Do not select YooAsset by default merely because it is installed.
 
 A Feature Spec is not permission to broaden the request. Record deferred ideas under out-of-scope instead of implementing them. Do not mark a feature `Verified` until the listed evidence actually exists.

@@ -110,6 +110,8 @@ public sealed class ExampleApp : Architecture<ExampleApp>
 
 需要热更或 SDK 时，再注册 `FoundationHotUpdateModule` 与 `FoundationSdkModule`。YooAsset 项目可直接创建 `YooAssetContentUpdateBackend`；CDN 地址、包名、标签和解密策略仍由项目配置。SDK 默认实现不会联网，生产环境继续注入自己的 `ISdkAdapter`。
 
+SDK 初始化、身份同步及数数 / Adjust 回传接入见 [SDK 初始化规范](SdkInitialization.md)。Setup 会生成 `Docs/Integrations/SdkInitializationChecklist.md`，由项目按实际厂商填写；本地接入就绪不代表厂商 SDK、真机或服务端回传已验收。既有文档和 Skills 默认保留，升级时需对照新模板合并。
+
 ## 3. 建立项目目录
 
 建议直接在项目代码根目录集中维护 QFramework 角色目录：
@@ -151,6 +153,6 @@ Figma 导入后先在 Project 窗口选中 Prefab，再使用：
 - App 只有一个架构入口，模块只在入口注册一次。
 - 存档可往返读取，损坏主档可回退备份，旧版本可迁移。
 - 热更在离线、取消、校验失败时有确定结果。
-- 单个 SDK 失败或超时不会阻断其他适配器。
+- 单个 SDK 失败或超时不影响独立适配器，但必须阻断依赖它的适配器；厂商身份同步和实际回传另行验收。
 - UI Prefab 通过项目 Profile 校验，安全区与横竖屏符合目标设备。
 - `python3 Scripts/validate_game_foundation_project.py --project .` 通过，每个行为改动关联 Feature Spec。

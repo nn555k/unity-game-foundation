@@ -5,13 +5,14 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from install_upm_packages import DEFAULT_SELECTION, resolve_selection, update_manifest
 from onboard_project import validate_readiness
-from unittest.mock import patch
 import onboard_project
 import install_upm_packages
 import validate_clean_install
+import sync_governance_templates as governance
 
 
 class OnboardingDefaultsTests(unittest.TestCase):
@@ -52,6 +53,33 @@ class OnboardingDefaultsTests(unittest.TestCase):
     def test_missing_figma_does_not_block_ready_project(self):
         """Absent manual tools are distinct from missing required setup evidence."""
         validate_readiness(self.report())
+
+    def test_sdk_governance_is_distributed_with_setup(self):
+        """A fresh Setup template tree receives the canonical SDK contract and checklist."""
+        with tempfile.TemporaryDirectory(prefix=".sdk-governance-", dir=governance.REPOSITORY_ROOT) as folder:
+            with patch.object(governance, "TEMPLATE_ROOT", Path(folder)):
+                self.assertEqual(governance.synchronize(False), [])
+                for source, target in (
+                    ("Docs/SdkInitialization.md", "Docs/Foundation/SdkInitialization.md"),
+                    ("Governance/Docs/Integrations/SdkInitializationChecklist.md", "Docs/Integrations/SdkInitializationChecklist.md"),
+                    ("Governance/AGENTS.consumer.md", "AGENTS.md"),
+                    (".agents/skills/develop-foundation-feature/SKILL.md", "Agents/skills/develop-foundation-feature/SKILL.md"),
+                    (".agents/skills/specify-foundation-feature/SKILL.md", "Agents/skills/specify-foundation-feature/SKILL.md"),
+                ):
+                    self.assertEqual((governance.REPOSITORY_ROOT / source).read_bytes(), (Path(folder) / target).read_bytes())
+                self.assertEqual(governance.synchronize(True), [])
+
+    def test_stale_sdk_contract_is_rejected(self):
+        """Check-only validation rejects stale distributed instructions without overwriting them."""
+        with tempfile.TemporaryDirectory(prefix=".sdk-governance-", dir=governance.REPOSITORY_ROOT) as folder:
+            with patch.object(governance, "TEMPLATE_ROOT", Path(folder)):
+                self.assertEqual(governance.synchronize(False), [])
+                target = Path(folder) / "Docs/Foundation/SdkInitialization.md"
+                target.write_text("Outdated SDK contract\n", encoding="utf-8")
+                errors = governance.synchronize(True)
+                self.assertEqual(len(errors), 1)
+                self.assertIn("SdkInitialization.md", errors[0])
+                self.assertEqual(target.read_text(encoding="utf-8"), "Outdated SDK contract\n")
 
     def test_missing_required_check_is_rejected(self):
         """A localReady boolean alone cannot conceal missing compile or provider evidence."""

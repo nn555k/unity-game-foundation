@@ -18,6 +18,7 @@ Use `Docs/Features/FEATURE_TEMPLATE.md` as the canonical structure.
 - State mutation path and persistent-data impact.
 - UI, prefab, scene, and Inspector impact.
 - Relevant failure, offline, cancellation, and lifecycle behavior.
+- For SDK initialization/attribution/identity work: actual versions, dependency order and readiness gates, identity sources/synchronization owner, plus separate local/device/server acceptance evidence and an integration checklist link.
 - Acceptance criteria and verification evidence.
 - Definition of Done with unchecked work left visible.
 

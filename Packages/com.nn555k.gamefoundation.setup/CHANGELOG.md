@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Distribute the project-owned ThinkingData/Adjust initialization contract, identity/dependency failure rules, AI guidance and separate local/device/server postback checklist. No vendor SDKs or runtime orchestration changes are included.
+
 ## 0.6.1 - 2026-10-19
 
 - Correct new-project typed resource roots, lazy-popup guidance, distributed governance and Sprite validation.

@@ -38,6 +38,8 @@ python3 Scripts/onboard_project.py --project /path/to/MyGame --project-name MyGa
 
 Save、HotUpdate 和 SDK 包都带有可从 Package Manager 导入的适配示例。真实厂商接入方式和验收边界见 `Docs/IntegrationAdapters.md`。
 
+数数 / Adjust 的先后顺序、身份同步、前置失败阻断及服务端回传验收见 [SDK 初始化规范](Docs/SdkInitialization.md)。对应 AI 规则与清单随 Setup 治理模板分发，不自动安装厂商 SDK。此项属于当前未发布的模板更新；既有 `v0.6.0` 不包含它，发布前可通过本检出目录的 `--local-packages` 验证。
+
 ## AI workflow
 
 Setup 会把消费项目所需的 `AGENTS.md` 托管区块、`.agents/skills`、Foundation 文档与 Feature Spec 模板写入新项目。每个行为改动先建立 `Docs/Features/<feature-id>.md`，实现后由同一份规范驱动目录、QFramework、Prefab、编译、测试和 CI 验收。

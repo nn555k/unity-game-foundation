@@ -7,6 +7,7 @@ Read first:
 - `Docs/FeatureGovernance.md`
 - `Docs/FigmaUiWorkflow.md`
 - `Docs/IntegrationAdapters.md`
+- `Docs/SdkInitialization.md` when changing SDK startup, attribution, identity guidance or related consumer templates
 - `.agents/skills/maintain-game-foundation/SKILL.md` when changing shared packages
 
 ## Scope

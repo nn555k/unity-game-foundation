@@ -4,12 +4,14 @@ Foundation 稳定的是生命周期和错误边界，不持有厂商 SDK、CDN �
 
 ## SDK
 
-从 Package Manager 导入 `Game Foundation SDK` 的 `SDK Adapter Template`，在项目程序集里实现 `IProjectSdkBridge`，并创建 `ProjectSdkAdapter`。Adapter 只负责调用厂商 API；用户授权判断、顺序、超时、状态查询和 Unity 生命周期转发由 `SdkHost` 统一处理。
+从 Package Manager 导入 `Game Foundation SDK` 的 `SDK Adapter Template`，在项目程序集里实现 `IProjectSdkBridge`，并创建 `ProjectSdkAdapter`。`SdkHost` 根据项目提供的授权状态执行授权门、顺序、超时、状态查询和 Unity 生命周期转发；具体隐私策略、厂商身份同步和 SDK 间就绪依赖仍由项目负责。
+
+同时使用数数与 Adjust 时，按 [SDK 初始化与回传规范](SdkInitialization.md) 实现“数数就绪 → 实际身份 → Adjust 回传参数 → Adjust 初始化”，并填写 `Docs/Integrations/SdkInitializationChecklist.md`。只设置 `Order` 不会自动阻断前置失败或未授权后的依赖 SDK。
 
 接入时至少验证：
 
 - 未授权时不会初始化需要授权的 Adapter。
-- 单个 Adapter 失败或超时不会污染其余 Adapter。
+- 单个 Adapter 失败或超时不会污染独立 Adapter；依赖它的 Adapter 必须按项目门禁阻断。
 - 用户 ID、焦点和暂停事件只发给已经 Ready 的 Adapter。
 - 密钥来自项目配置、CI Secret 或平台配置，不提交到 Foundation 仓库。
 

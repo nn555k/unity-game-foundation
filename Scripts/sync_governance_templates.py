@@ -49,6 +49,7 @@ def source_mappings() -> list[tuple[Path, Path]]:
         "FeatureGovernance.md",
         "FigmaUiWorkflow.md",
         "IntegrationAdapters.md",
+        "SdkInitialization.md",
         "ResourceLoading.md",
         "ProjectLayout.md",
         "UiLayers.md",

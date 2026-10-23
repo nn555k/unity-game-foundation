@@ -58,6 +58,8 @@ updated: {{DATE}}
 ## Integrations and failure behavior
 
 - SDK/consent/lifecycle: None
+- SDK versions, initialization dependencies, identity source/sync owner: None
+- SDK prerequisite failure gate and local/device/server evidence (link integration checklist): None
 - Content update/offline/rollback: None
 - Cancellation, timeout, retry: None
 
