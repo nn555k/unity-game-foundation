@@ -1,6 +1,6 @@
 {
   "name": "com.nn555k.gamefoundation.core",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "displayName": "Game Foundation Core",
   "description": "Shared QFramework composition, clock, logging, and infrastructure contracts for Unity projects.",
   "unity": "2022.3",

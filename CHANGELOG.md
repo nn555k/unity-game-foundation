@@ -1,11 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 - 2026-10-23
 
+- Extract ThinkingData/Adjust initialization order, real identity synchronization, prerequisite failure gates and separate client/device/server postback acceptance into distributed documentation, AGENTS, Skills and Feature Specs. No vendor SDK implementation or credentials are included.
+- Align all package versions, installer defaults and Setup generation metadata to v0.7.0. Existing project documents/Skills require reviewed merging; SDK ordering rules are not a new runtime dependency scheduler or proof of backend ingestion.
 - Publish reusable seven-layer uGUI sorting/input/modal contracts, project adoption guidance and Inspector-owned control preservation rules through Setup, consumer Skills and Feature Specs.
 - Recognize partial QFramework roles in Python and Unity validators without treating comments or strings as inheritance.
 - Preserve locally modified/legacy AGENTS managed blocks with a review proposal and an installed-block hash; retain complete existing project configuration and UI profile identity during repair.
-- Add existing-architecture adoption using explicit source/type/profile identities without generating or overwriting an App, Controller or project asmdef. Runtime APIs, save formats and existing UI assets are unchanged; additive Setup options should ship in the next minor release.
+- Add existing-architecture adoption using explicit source/type/profile identities without generating or overwriting an App, Controller or project asmdef. Runtime APIs, save formats and existing UI assets are unchanged; additive Setup options ship in this minor release.
 
 ## 0.6.1 - 2026-10-19
 

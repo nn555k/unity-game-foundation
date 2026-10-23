@@ -28,7 +28,7 @@ python3 Scripts/onboard_project.py --project /path/to/MyGame --project-name MyGa
 
 ```json
 {
-  "com.nn555k.gamefoundation.core": "https://github.com/nn555k/unity-game-foundation.git?path=/Packages/com.nn555k.gamefoundation.core#v0.6.1"
+  "com.nn555k.gamefoundation.core": "https://github.com/nn555k/unity-game-foundation.git?path=/Packages/com.nn555k.gamefoundation.core#v0.7.0"
 }
 ```
 
@@ -38,7 +38,7 @@ python3 Scripts/onboard_project.py --project /path/to/MyGame --project-name MyGa
 
 Save、HotUpdate 和 SDK 包都带有可从 Package Manager 导入的适配示例。真实厂商接入方式和验收边界见 `Docs/IntegrationAdapters.md`。
 
-数数 / Adjust 的先后顺序、身份同步、前置失败阻断及服务端回传验收见 [SDK 初始化规范](Docs/SdkInitialization.md)。对应 AI 规则与清单随 Setup 治理模板分发，不自动安装厂商 SDK。此项属于当前未发布的模板更新；既有 `v0.6.0` 不包含它，发布前可通过本检出目录的 `--local-packages` 验证。
+`v0.7.0` 起，数数 / Adjust 的先后顺序、身份同步、前置失败阻断及服务端回传验收见 [SDK 初始化规范](Docs/SdkInitialization.md)。对应 AI 规则与清单随 Setup 治理模板分发，不自动安装厂商 SDK。升级既有项目仍需对照新模板合并保留的文档与 Skills；本地就绪不代表实际服务端回传已通过。
 
 ## AI workflow
 
@@ -61,7 +61,7 @@ python3 Scripts/validate_clean_install.py
 ```bash
 python3 Scripts/validate_clean_install.py \
   --repository https://github.com/nn555k/unity-game-foundation.git \
-  --ref v0.6.1
+  --ref v0.7.0
 ```
 
 仓库自身是一个最小 Unity 验证工程。CI 配置见 `Docs/CI.md`。

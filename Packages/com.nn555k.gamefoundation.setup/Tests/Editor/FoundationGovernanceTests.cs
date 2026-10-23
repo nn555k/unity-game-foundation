@@ -84,7 +84,7 @@ namespace GameFoundation.Setup.Editor.Tests
             StringAssert.Contains("\"projectName\": \"SampleGame\"", json);
             StringAssert.Contains("Assets/Scripts/Game/Architecture/SampleGameApp.cs", json);
             StringAssert.Contains("Assets/Scripts/Game/Architecture/SampleGameController.cs", json);
-            StringAssert.Contains("\"generatedByVersion\": \"0.6.1\"", json);
+            StringAssert.Contains("\"generatedByVersion\": \"0.7.0\"", json);
         }
 
         /// <summary>Only a known unmodified managed block can be automatically replaced by a newer template.</summary>

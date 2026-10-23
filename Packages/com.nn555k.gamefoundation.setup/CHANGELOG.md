@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 - 2026-10-23
 
 - Distribute the project-owned ThinkingData/Adjust initialization contract, identity/dependency failure rules, AI guidance and separate local/device/server postback checklist. No vendor SDKs or runtime orchestration changes are included.
+- Include the merged existing-architecture adoption, managed AGENTS preservation and reusable UI governance updates; align generated project metadata and install references to v0.7.0. Existing project-owned documents and Skills remain preserved for reviewed merging.
 
 ## 0.6.1 - 2026-10-19
 

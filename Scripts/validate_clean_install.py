@@ -48,7 +48,7 @@ def parse_arguments() -> argparse.Namespace:
         default="",
         help="Optional Git repository URL; defaults to external local file dependencies",
     )
-    parser.add_argument("--ref", default="v0.6.1", help="Git branch, tag or commit")
+    parser.add_argument("--ref", default="v0.7.0", help="Git branch, tag or commit")
     return parser.parse_args()
 
 
@@ -278,6 +278,8 @@ def run_setup_wizard(editor: Path, project_root: Path) -> int:
         project_root / "Docs/Foundation/UiLayers.md",
         project_root / "Docs/Foundation/UiLayers.Project.md",
         project_root / "Docs/Foundation/UiAuthoring.md",
+        project_root / "Docs/Foundation/SdkInitialization.md",
+        project_root / "Docs/Integrations/SdkInitializationChecklist.md",
         project_root / "Docs/Features/smoke-feature.md",
         project_root / "Scripts/validate_game_foundation_project.py",
         project_root / ".github/workflows/game-foundation-governance.yml",

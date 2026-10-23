@@ -24,7 +24,7 @@ class OnboardingDefaultsTests(unittest.TestCase):
                 if module is not validate_clean_install:
                     arguments += ["--project", "/tmp/foundation-default-ref-fixture"]
                 with patch("sys.argv", arguments):
-                    self.assertEqual("v0.6.1", module.parse_arguments().ref)
+                    self.assertEqual("v0.7.0", module.parse_arguments().ref)
 
     def test_default_selection_excludes_figma(self):
         """Default installation keeps all seven base/provider packages but never opts into Figma."""

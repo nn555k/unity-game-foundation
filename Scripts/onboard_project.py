@@ -59,7 +59,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--namespace", dest="namespace")
     parser.add_argument("--editor", default=EDITOR)
     parser.add_argument("--repository", default="https://github.com/nn555k/unity-game-foundation.git")
-    parser.add_argument("--ref", default="v0.6.1")
+    parser.add_argument("--ref", default="v0.7.0")
     parser.add_argument("--local-packages", action="store_true", help="Use this checkout for development verification")
     parser.add_argument("--content-root", default=None)
     parser.add_argument("--content-package", default=None)

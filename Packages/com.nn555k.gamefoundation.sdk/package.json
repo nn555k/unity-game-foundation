@@ -1,6 +1,6 @@
 {
   "name": "com.nn555k.gamefoundation.sdk",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "displayName": "Game Foundation SDK",
   "description": "Optional SDK adapter lifecycle, consent gating, ordered initialization, timeout, and diagnostics.",
   "unity": "2022.3",
@@ -8,7 +8,7 @@
   "documentationUrl": "https://github.com/nn555k/unity-game-foundation/tree/main/Packages/com.nn555k.gamefoundation.sdk",
   "changelogUrl": "https://github.com/nn555k/unity-game-foundation/blob/main/Packages/com.nn555k.gamefoundation.sdk/CHANGELOG.md",
   "dependencies": {
-    "com.nn555k.gamefoundation.core": "0.6.1"
+    "com.nn555k.gamefoundation.core": "0.7.0"
   },
   "keywords": [
     "sdk",

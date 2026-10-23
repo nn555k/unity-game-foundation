@@ -14,7 +14,7 @@ namespace GameFoundation.Setup.Editor
     {
         private const string InstallQueueKey = "GameFoundation.OptionalToolInstallQueue";
         private const string FoundationRepository = "https://github.com/nn555k/unity-game-foundation.git";
-        private const string FoundationVersion = "v0.6.1";
+        private const string FoundationVersion = "v0.7.0";
         private const string YooAssetPackageId = "com.tuyoogame.yooasset";
         private const string YooAssetUrl = "https://github.com/tuyoogame/YooAsset.git?path=Assets/YooAsset#2.3.18";
         private static readonly PackageReference YooAssetBackend = new PackageReference(

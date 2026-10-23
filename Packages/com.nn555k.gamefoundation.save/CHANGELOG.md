@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 - 2026-10-23
+
+- Align package and Foundation dependencies with the Setup governance release. Runtime APIs and serialized data formats are unchanged.
+
 ## 0.6.1 - 2026-10-19
 
 - Align package version with the Setup/governance release; runtime APIs and behavior are unchanged.
